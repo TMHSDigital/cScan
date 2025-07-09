@@ -1,45 +1,73 @@
-# cScan - User Space Cleanup Assistant
+# cScan - Cross-Platform Cleanup Assistant
 
-> A comprehensive Windows disk cleanup utility that helps you reclaim disk space by finding and removing large files, cleaning temporary files, and emptying the recycle bin.
+> A comprehensive disk cleanup utility for **Windows**, **macOS**, and **Linux** that helps you reclaim disk space by finding and removing large files, cleaning temporary files, and managing trash/recycle bin with advanced safety features.
+
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg)](https://github.com/yourusername/cScan)
+[![Python](https://img.shields.io/badge/python-3.6%2B-green.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
 
 ---
 
 ## Table of Contents
 
-- [What This Tool Does](#what-this-tool-does)
+- [Features](#features)
+- [Platform Support](#platform-support)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Quick Start Guide](#quick-start-guide)
-- [Detailed Usage Instructions](#detailed-usage-instructions)
-- [Understanding Results](#understanding-results)
-- [Configuration & Settings](#configuration--settings)
+- [Enhanced Features](#enhanced-features)
 - [Safety Features](#safety-features)
+- [Configuration](#configuration)
+- [Usage Examples](#usage-examples)
 - [Troubleshooting](#troubleshooting)
-- [Performance & Examples](#performance--examples)
-- [Advanced Usage](#advanced-usage)
-- [Support & FAQ](#support--faq)
+- [FAQ](#faq)
 
 ---
 
-## What This Tool Does
+## Features
 
-cScan helps you **free up disk space** on your Windows computer by:
+### 🚀 Core Features
 
 | Feature | Description |
 |---------|-------------|
-| **Large File Detection** | Finds files taking up significant space |
-| **Temporary File Cleanup** | Removes accumulated temporary files |
-| **Recycle Bin Management** | Safely empties your recycle bin |
-| **Smart Suggestions** | Provides manual cleanup recommendations |
+| **Smart File Analysis** | AI-like categorization and safety assessment |
+| **Cross-Platform** | Works on Windows, macOS, and Linux |
+| **Safe Deletion** | Recycle Bin/Trash integration with recovery options |
+| **Smart Suggestions** | Intelligent cleanup recommendations |
+| **Multiple Interfaces** | CLI and GUI options |
+| **Comprehensive Logging** | Complete audit trail of all operations |
 
-### Key Benefits
+### 🎯 Smart Cleanup Categories
 
 ```
-✓ Safe Operation    - Only works with your personal files
-✓ User Control      - Always asks before deleting anything  
-✓ Detailed Logging  - Shows exactly what was done
-✓ No Admin Required - Runs with regular user privileges
+✓ Cache Files        - Browser, app, and system caches
+✓ Temporary Files    - Old temp files (7+ days)
+✓ Large Downloads    - Files >500MB in Downloads
+✓ Old Installers     - Setup files >30 days old
+✓ Crash Dumps        - Debug and crash report files
+✓ Media Files        - Large videos and audio files
+✓ Backup Files       - Old backup files >30 days
 ```
+
+---
+
+## Platform Support
+
+### Automatic Platform Detection
+
+```
+--- User Space Cleanup Assistant (Windows) ---
+--- User Space Cleanup Assistant (macOS) ---  
+--- User Space Cleanup Assistant (Linux) ---
+```
+
+### Platform-Specific Features
+
+| Platform | Trash System | Temp Locations | Admin Check |
+|----------|--------------|----------------|-------------|
+| **Windows** | Recycle Bin | `%TEMP%`, `%LOCALAPPDATA%\Temp` | UAC |
+| **macOS** | Trash | `/tmp`, `~/Library/Caches` | sudo |
+| **Linux** | Trash/gio | `/tmp`, `~/.cache` | root |
 
 ---
 
@@ -47,491 +75,377 @@ cScan helps you **free up disk space** on your Windows computer by:
 
 ### System Requirements
 
-| Component | Requirement |
-|-----------|-------------|
-| **Operating System** | Windows 10 or Windows 11 (any edition) |
-| **Python Version** | Python 3.6 or higher |
-| **Disk Space** | Less than 1 MB for program files |
-| **User Account** | Regular user account (no admin needed) |
+| Component | Windows | macOS | Linux |
+|-----------|---------|-------|-------|
+| **OS Version** | Windows 10+ | macOS 10.12+ | Ubuntu 18.04+ |
+| **Python** | 3.6+ | 3.6+ | 3.6+ |
+| **Dependencies** | psutil | psutil | psutil |
+| **Storage** | <10MB | <10MB | <10MB |
 
-### Checking if Python is Installed
+### Installing Python
 
-1. **Open Command Prompt:**
-   - Press `Windows Key + R`
-   - Type `cmd` and press Enter
+#### Windows
+```powershell
+# Check if Python is installed
+python --version
 
-2. **Check Python Version:**
-   ```cmd
-   python --version
-   ```
+# If not installed, download from python.org
+# IMPORTANT: Check "Add Python to PATH" during installation
+```
 
-3. **Expected Results:**
-   - ✅ **Success:** Shows "Python 3.x.x"
-   - ❌ **Need to Install:** Shows error message
+#### macOS
+```bash
+# Python 3 usually comes pre-installed
+python3 --version
 
-### Installing Python (If Needed)
+# If needed, install via Homebrew
+brew install python3
+```
 
-> **Step-by-Step Python Installation**
+#### Linux
+```bash
+# Check Python version
+python3 --version
 
-1. **Download Python:**
-   - Visit: https://python.org/downloads
-   - Click the large "Download Python" button
-
-2. **Install Python:**
-   - Run the downloaded file
-   - **CRITICAL:** Check "Add Python to PATH"
-   - Click "Install Now"
-   - Wait for completion
-
-3. **Verify Installation:**
-   - Restart your computer
-   - Test with `python --version` command
+# If needed, install via package manager
+sudo apt-get update
+sudo apt-get install python3 python3-pip
+```
 
 ---
 
 ## Installation
 
-### Method 1: GitHub Download (Recommended)
+### 1. Download cScan
 
-```
-Step 1: Download
-┌─────────────────────────────────────┐
-│ Go to GitHub repository page       │
-│ Click green "Code" button          │
-│ Select "Download ZIP"              │
-│ Save to Downloads folder           │
-└─────────────────────────────────────┘
+```bash
+# Clone repository (all platforms)
+git clone https://github.com/yourusername/cScan.git
+cd cScan
 
-Step 2: Extract
-┌─────────────────────────────────────┐
-│ Right-click downloaded ZIP file     │
-│ Select "Extract All..."            │
-│ Choose destination folder          │
-│ Recommended: C:\Scripts\cScan      │
-└─────────────────────────────────────┘
-
-Step 3: Verify
-┌─────────────────────────────────────┐
-│ Open extracted folder              │
-│ Confirm these files exist:         │
-│  • cScan.py                       │
-│  • cScan_config.ini               │
-│  • README.md                      │
-└─────────────────────────────────────┘
+# Or download ZIP and extract
 ```
 
-### Method 2: Manual Setup
+### 2. Install Dependencies
 
+```bash
+# Windows
+pip install psutil
+
+# macOS/Linux
+pip3 install psutil
 ```
-1. Create folder: C:\Scripts\cScan
-2. Copy files to folder:
-   • cScan.py
-   • cScan_config.ini
-3. Verify files are present
+
+### 3. Verify Installation
+
+```bash
+# Windows
+python cScan.py --help
+
+# macOS/Linux  
+python3 cScan.py --help
 ```
 
 ---
 
 ## Quick Start Guide
 
-### Getting Started in 3 Steps
+### Basic Usage
+
+```bash
+# Windows
+python cScan.py
+
+# macOS/Linux
+python3 cScan.py
+```
+
+### Interface Options
 
 ```
-┌─ STEP 1: Open Command Window ─────────────────────┐
-│                                                   │
-│ 1. Navigate to cScan folder                      │
-│ 2. Hold Shift + Right-click in empty space       │
-│ 3. Select "Open PowerShell window here"          │
-│                                                   │
-└───────────────────────────────────────────────────┘
+Choose interface:
+1. Command Line Interface (CLI)    ← Text-based, powerful
+2. Graphical User Interface (GUI)  ← Visual, user-friendly  
+3. Edit Configuration             ← Customize settings
+```
 
-┌─ STEP 2: Run Program ─────────────────────────────┐
-│                                                   │
-│ Type: python cScan.py                            │
-│ Press: Enter                                      │
-│                                                   │
-└───────────────────────────────────────────────────┘
+### First Scan
 
-┌─ STEP 3: Choose Interface ───────────────────────┐
+```
+┌─ CLI Quick Start ─────────────────────────────────┐
 │                                                   │
-│ Option 1: Command Line (text-based)              │
-│ Option 2: Graphical Interface (window-based)     │
-│ Option 3: Settings (customize program)           │
+│ 1. Choose option 1 (CLI)                         │
+│ 2. Review detected platform and scan paths       │
+│ 3. Wait for scan to complete                     │
+│ 4. Choose from smart suggestions                 │
+│ 5. Confirm deletions when prompted               │
 │                                                   │
 └───────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Detailed Usage Instructions
+## Enhanced Features
 
-### Graphical Interface (Easiest for Beginners)
+### 🧠 Smart File Analysis
 
-```
-┌─ LAUNCH ─────────────────────────────────────────┐
-│ 1. Run: python cScan.py                         │
-│ 2. Choose: Option 2 (GUI)                       │
-│ 3. Window opens with buttons and text area      │
-└──────────────────────────────────────────────────┘
-
-┌─ SCAN ───────────────────────────────────────────┐
-│ 1. Click: "Start Scan" button                   │
-│ 2. Wait: Progress bar shows status              │
-│ 3. Review: Results appear in text area          │
-└──────────────────────────────────────────────────┘
-
-┌─ ACTIONS ────────────────────────────────────────┐
-│ • "Clean Temp Files" - Remove temporary files   │
-│ • "Empty Recycle Bin" - Clear recycle bin       │
-│ • "Settings" - Customize program behavior       │
-│ • "Exit" - Close program                        │
-└──────────────────────────────────────────────────┘
-```
-
-### Command Line Interface (For Advanced Users)
+Files are automatically categorized and assessed for safety:
 
 ```
-┌─ LAUNCH ─────────────────────────────────────────┐
-│ 1. Run: python cScan.py                         │
-│ 2. Choose: Option 1 (CLI)                       │
-│ 3. Follow text prompts in window                │
-└──────────────────────────────────────────────────┘
+File Display Format:
+SIZE SAFETY [CATEGORY] - PATH
 
-┌─ INTERACTION ────────────────────────────────────┐
-│ • Type 'y' for Yes                              │
-│ • Type 'n' for No                               │
-│ • Type 'q' to Quit deletion process             │
-│ • Type 'DELETE ALL' to delete all files         │
-└──────────────────────────────────────────────────┘
+Examples:
+4.36 GB ✓ [cache] - ~/Library/Caches/app.cache
+1.22 GB ? [media] - ~/Downloads/movie.mp4  
+523 MB  ! [unknown] - ~/Documents/data.bin
+102 MB  ✗ [system] - /usr/lib/system.so
 ```
 
----
+**Safety Indicators:**
+- ✓ = Safe to delete
+- ? = User confirmation needed
+- ! = Unknown (review carefully)
+- ✗ = Critical (protected)
 
-## Understanding Results
+### 📊 Smart Suggestions
 
-### Large Files Report Format
-
-```
-Example Output:
-┌────────────────────────────────────────────────────────────┐
-│ Found 5 large files:                                      │
-│    250.00 MB - C:\Users\YourName\Downloads\movie.mp4      │
-│    180.50 MB - C:\Users\YourName\Documents\presentation.  │
-│    120.25 MB - C:\Users\YourName\Downloads\software.exe   │
-│                                                            │
-│ Total size of large files: 550.75 MB                      │
-└────────────────────────────────────────────────────────────┘
-```
-
-### File Types Explanation
-
-| File Type | Extension | Description | Safe to Delete? |
-|-----------|-----------|-------------|-----------------|
-| **Software Installers** | `.exe`, `.msi` | Programs you've installed | Usually Yes (if already installed) |
-| **Video Files** | `.mp4`, `.avi`, `.mkv` | Movies, recordings | Your choice |
-| **Backup Files** | `.bak`, `.old`, `.backup` | Old file copies | Usually Yes |
-| **Documents** | `.pdf`, `.docx`, `.pptx` | Your documents | Your choice |
-| **Archives** | `.zip`, `.rar`, `.7z` | Compressed files | Check contents first |
-
-### Size Reference Guide
+The system provides intelligent cleanup recommendations:
 
 ```
-Size Units:
-┌─────────────┬──────────────┬─────────────────────┐
-│ Unit        │ Equivalent   │ Example             │
-├─────────────┼──────────────┼─────────────────────┤
-│ KB (Kilobyte) │ 1,024 bytes  │ Small text file     │
-│ MB (Megabyte) │ 1,024 KB     │ Photo, song         │
-│ GB (Gigabyte) │ 1,024 MB     │ Movie, large app    │
-│ TB (Terabyte) │ 1,024 GB     │ Entire hard drive   │
-└─────────────┴──────────────┴─────────────────────┘
+SMART CLEANUP SUGGESTIONS
+════════════════════════════════════════════════════
+
+1. Cache files (can be regenerated)
+   Files: 61 | Size: 27.93 GB | Safety: safe
+
+2. Old temporary files (7+ days old)
+   Files: 23 | Size: 3.35 GB | Safety: safe
+
+3. Large media files (>1GB each)
+   Files: 4 | Size: 5.18 GB | Safety: user
 ```
 
----
+### 🔄 Multiple Review Modes
 
-## Configuration & Settings
+1. **Smart Suggestions** - AI-guided cleanup
+2. **Manual Review** - File-by-file control
+3. **Category View** - Browse by file type
+4. **Quick Actions** - Batch operations
 
-### Accessing Settings
+### 📝 Comprehensive Logging
 
-| Method | Command | When to Use |
-|--------|---------|-------------|
-| **From Main Menu** | Choose Option 3 | When starting program |
-| **From GUI** | Click "Settings" button | While using graphical interface |
-| **Direct Access** | `python cScan.py --config` | Quick settings access |
-
-### Key Settings Explained
-
-#### File Size Threshold
-```
-┌─ FILE SIZE THRESHOLD ────────────────────────────┐
-│                                                  │
-│ Default: 100 MB                                  │
-│                                                  │
-│ Lower values (50 MB):                            │
-│   • Finds more files                             │
-│   • More detailed cleanup                        │
-│                                                  │
-│ Higher values (500 MB):                          │
-│   • Finds fewer files                            │
-│   • Only very large files                        │
-│                                                  │
-└──────────────────────────────────────────────────┘
-```
-
-#### Scan Locations
-```
-┌─ RECOMMENDED SETTINGS ───────────────────────────┐
-│                                                  │
-│ ✓ User Profile      - Your entire user folder   │
-│ ✓ Downloads         - Downloads folder          │
-│ ✓ Documents         - Documents folder          │
-│ ✓ Desktop           - Desktop files             │
-│ ✓ Pictures          - Pictures folder           │
-│ ✓ Videos           - Videos folder              │
-│ ✓ Music            - Music folder               │
-│ ✓ Temp Folders     - Temporary file locations   │
-│                                                  │
-└──────────────────────────────────────────────────┘
-```
+All operations are logged:
+- **Windows**: `%TEMP%\cScan_backups\deleted_files.json`
+- **macOS/Linux**: `/tmp/cScan_backups/deleted_files.json`
 
 ---
 
 ## Safety Features
 
-### What cScan WILL NOT Do
+### 🛡️ Multi-Layer Protection
 
 ```
-🛡️ SAFETY GUARANTEES
-┌────────────────────────────────────────────────────┐
-│                                                    │
-│ ✗ Delete system files                             │
-│ ✗ Delete files without asking                     │
-│ ✗ Break your computer                             │
-│ ✗ Delete important programs                       │
-│ ✗ Access files you can't access                   │
-│ ✗ Run without your permission                     │
-│                                                    │
-└────────────────────────────────────────────────────┘
+Protection Levels:
+┌────────────────────────────────────────────────┐
+│ 1. Platform-aware system file protection       │
+│ 2. Running process detection                   │
+│ 3. File-in-use checking                       │
+│ 4. Trash/Recycle Bin integration             │
+│ 5. Optional backup before deletion            │
+│ 6. Comprehensive deletion logging             │
+│ 7. Dry-run mode for testing                  │
+└────────────────────────────────────────────────┘
 ```
 
-### What cScan WILL Do
+### Protected Paths
 
+| Platform | Protected Directories |
+|----------|---------------------|
+| **Windows** | `C:\Windows`, `C:\Program Files`, System32 |
+| **macOS** | `/System`, `/Library`, `/Applications` |
+| **Linux** | `/bin`, `/usr`, `/lib`, `/etc`, `/boot` |
+
+---
+
+## Configuration
+
+### Configuration File
+
+Location: `cScan_config.ini` (same directory as script)
+
+### Key Settings
+
+```ini
+[Settings]
+# File size threshold (MB)
+large_file_threshold_mb = 100
+
+# Use Trash/Recycle Bin (cross-platform)
+use_recycle_bin = true
+
+# Safety features
+show_safety_warnings = true
+dry_run_mode = false
+backup_before_delete = false
+
+# Interface preference
+default_interface = ask  # ask, cli, or gui
+
+[Paths]
+# Standard folders to scan
+include_downloads = true
+include_documents = true
+include_temp_folders = true
+
+# Platform-specific custom paths
+# Windows: custom_scan_paths = D:\Downloads, E:\Temp
+# macOS/Linux: custom_scan_paths = /Users/Shared, /opt/temp
+custom_scan_paths = 
 ```
-✅ SAFETY FEATURES
-┌────────────────────────────────────────────────────┐
-│                                                    │
-│ ✓ Show exactly what will be deleted               │
-│ ✓ Allow individual file review                    │
-│ ✓ Let you skip files you want to keep             │
-│ ✓ Provide detailed operation logs                 │
-│ ✓ Only work in your user folders                  │
-│ ✓ Respect Windows file permissions                │
-│                                                    │
-└────────────────────────────────────────────────────┘
+
+### Editing Configuration
+
+```bash
+# Direct configuration access
+python cScan.py --config  # Windows
+python3 cScan.py --config # macOS/Linux
+
+# Or choose option 3 from main menu
+```
+
+---
+
+## Usage Examples
+
+### Example 1: Smart Cleanup (Recommended)
+
+```bash
+$ python3 cScan.py
+
+--- User Space Cleanup Assistant (macOS) ---
+
+Choose interface: 1
+
+============================================================
+SMART FILE ANALYSIS RESULTS
+============================================================
+
+File Categories Found:
+  Cache         64 files    28.32 GB
+  Media        374 files    87.28 GB
+  Downloads      3 files   520.61 MB
+  Temp          12 files     1.24 GB
+
+Safety Analysis:
+  ✓ Safe         52 files
+  ? User        388 files
+  ! Unknown      69 files
+
+============================================================
+SMART CLEANUP SUGGESTIONS
+============================================================
+
+1. Cache files (can be regenerated)
+   Files: 61 | Size: 27.93 GB | Safety: safe
+   
+Delete these files? (Y/n): y
+✓ Deleted 61 files
+
+Total space freed: 27.93 GB
+```
+
+### Example 2: Manual Review
+
+```bash
+Manual Review Mode
+Commands: y=delete, n=skip, i=info, q=quit
+
+[1/25] 1.5 GB - ~/Downloads/old_installer.dmg
+Category: installers | Safety: user
+Action? (y/n/i/q): i
+
+────────────────────────────────
+File: old_installer.dmg
+Path: /Users/username/Downloads/old_installer.dmg
+Size: 1.5 GB
+Category: installers
+Safety: user
+Modified: 2024-11-15 10:30:00
+MIME Type: application/x-apple-diskimage
+────────────────────────────────
+
+Action? (y/n/i/q): y
+✓ Deleted
 ```
 
 ---
 
 ## Troubleshooting
 
-### Common Issues & Solutions
+### Platform-Specific Issues
 
-#### Python Not Found
+#### Windows
 ```
-❌ PROBLEM: "Python is not recognized"
+❌ PowerShell execution policy error
+✅ Run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
-✅ SOLUTION:
-1. Reinstall Python from python.org
-2. ✓ Check "Add Python to PATH" during install
-3. Restart computer
-4. Test: python --version
+❌ Python not found
+✅ Reinstall Python with "Add to PATH" checked
 ```
 
-#### Permission Errors
+#### macOS
 ```
-❌ PROBLEM: "Permission denied" errors
+❌ Permission denied errors
+✅ Grant Terminal full disk access in System Preferences
 
-✅ EXPLANATION:
-• This is normal and safe
-• Windows protects certain files
-• Program skips inaccessible files
-• Your system remains secure
+❌ Trash won't empty
+✅ Run: sudo rm -rf ~/.Trash/* (careful!)
 ```
 
-#### Program Won't Start
+#### Linux
 ```
-❌ PROBLEM: Error when running cScan.py
+❌ gio command not found
+✅ Install: sudo apt install glib2.0-bin
 
-✅ SOLUTIONS:
-1. Verify you're in correct folder
-2. Check both files exist:
-   • cScan.py
-   • cScan_config.ini
-3. Open new command window
-4. Restart computer if needed
+❌ Permission errors on temp files
+✅ Script only deletes files you own
 ```
 
-#### GUI Won't Open
-```
-❌ PROBLEM: Graphical interface fails
+### Common Solutions
 
-✅ SOLUTION:
-• Use command line interface (Option 1)
-• Works identically to GUI
-• Just as safe and effective
-```
-
-### Quick Diagnostic Commands
-
-```bash
-# Check Python installation
-python --version
-
-# Check current directory
-dir
-
-# List Python packages
-python -m pip list
-
-# Test cScan directly
-python cScan.py --config
-```
+| Issue | Solution |
+|-------|----------|
+| **ModuleNotFoundError: psutil** | Install: `pip install psutil` |
+| **GUI won't open** | Use CLI mode (option 1) |
+| **Scan is slow** | Exclude large media folders |
+| **Files won't delete** | Check if files are in use |
 
 ---
 
-## Performance & Examples
-
-### Typical Performance
-
-| Computer Type | Files Scanned | Time Required |
-|---------------|---------------|---------------|
-| **Light Usage** | 10,000-50,000 | 1-2 minutes |
-| **Average Usage** | 50,000-150,000 | 3-5 minutes |
-| **Heavy Usage** | 150,000+ | 5-15 minutes |
-
-### Example Results
-
-#### Example 1: Student Computer
-```
-┌─ SCAN RESULTS ───────────────────────────────────┐
-│                                                  │
-│ Files Scanned: 45,000                           │
-│ Large Files Found: 8                            │
-│ Total Size: 1.5 GB                              │
-│                                                  │
-│ Breakdown:                                       │
-│ • 3 old movie downloads (800 MB)                │
-│ • 2 software installers (400 MB)                │
-│ • 1 large document (200 MB)                     │
-│ • 2 backup files (100 MB)                       │
-│                                                  │
-│ Space Freed: 1.2 GB                             │
-│                                                  │
-└──────────────────────────────────────────────────┘
-```
-
-#### Example 2: Professional Computer
-```
-┌─ SCAN RESULTS ───────────────────────────────────┐
-│                                                  │
-│ Files Scanned: 180,000                          │
-│ Large Files Found: 25                           │
-│ Total Size: 5.2 GB                              │
-│                                                  │
-│ Breakdown:                                       │
-│ • Video projects (2.8 GB)                       │
-│ • Development files (1.1 GB)                    │
-│ • System backups (800 MB)                       │
-│ • Downloaded content (500 MB)                   │
-│                                                  │
-│ Space Freed: 2.1 GB                             │
-│                                                  │
-└──────────────────────────────────────────────────┘
-```
-
----
-
-## Advanced Usage
-
-### Command Line Options
-
-```bash
-# Interactive mode (choose interface)
-python cScan.py
-
-# Open settings directly
-python cScan.py --config
-```
-
-### Configuration File
-
-```ini
-# Location: cScan_config.ini
-# Safe to edit with Notepad
-
-[Settings]
-large_file_threshold_mb = 100    # Size threshold
-default_interface = ask          # Interface preference
-clean_temp_by_default = true     # Auto-suggest temp cleanup
-
-[Paths]
-include_downloads = true         # Scan Downloads folder
-include_documents = true         # Scan Documents folder
-custom_scan_paths =             # Additional folders (comma-separated)
-```
-
-### Automation Tips
-
-```
-For Regular Users:
-┌──────────────────────────────────────────────────┐
-│ Set default_interface = gui                      │
-│ Keep file threshold at 100 MB                    │
-│ Enable all standard scan paths                   │
-└──────────────────────────────────────────────────┘
-
-For Power Users:
-┌──────────────────────────────────────────────────┐
-│ Set default_interface = cli                      │
-│ Lower threshold to 50 MB for detailed cleanup    │
-│ Add custom paths for project folders             │
-└──────────────────────────────────────────────────┘
-```
-
----
-
-## Support & FAQ
-
-### Frequently Asked Questions
+## FAQ
 
 <details>
 <summary><strong>Is this safe to use?</strong></summary>
 
-Yes, cScan is designed with safety as the top priority:
-- Only works with your personal files
-- Always asks before deleting anything
-- Cannot access system files
-- Shows exactly what will be deleted
-
-</details>
-
-<details>
-<summary><strong>Will this speed up my computer?</strong></summary>
-
-cScan frees up disk space, which can help if your disk was getting full. However:
-- It won't directly speed up processing
-- It will prevent slowdowns from full disks
-- It makes more space for new files
+Yes! cScan includes multiple safety layers:
+- System files are protected
+- Files go to Trash/Recycle Bin by default
+- All deletions require confirmation
+- Complete logging for recovery
+- Dry-run mode for testing
 
 </details>
 
 <details>
 <summary><strong>Can I recover deleted files?</strong></summary>
 
-**Important:** Files deleted by cScan are permanently removed, not sent to recycle bin.
-- Only delete files you're sure you don't need
-- Consider backing up important files first
-- Review each file carefully before deletion
+Yes, if `use_recycle_bin = true` (default):
+- **Windows**: Check Recycle Bin
+- **macOS**: Check Trash
+- **Linux**: Check ~/.local/share/Trash
+
+Additionally, check the deletion log for file information.
 
 </details>
 
@@ -539,82 +453,119 @@ cScan frees up disk space, which can help if your disk was getting full. However
 <summary><strong>How often should I run this?</strong></summary>
 
 Recommended frequency:
-- **Monthly** for regular maintenance
-- **When disk space is low** (urgent cleanup)
-- **Before major installations** (make space)
-- **After large downloads** (cleanup afterward)
+- **Weekly**: For heavy computer users
+- **Monthly**: For regular maintenance
+- **When needed**: When disk space is low
 
 </details>
 
-### Getting Help
+<details>
+<summary><strong>Does it work on servers?</strong></summary>
 
-#### Before Requesting Support
+Yes, but:
+- Use CLI mode only
+- Enable dry_run_mode first
+- Review all suggestions carefully
+- Consider using read-only mode
 
+</details>
+
+<details>
+<summary><strong>Can I automate this?</strong></summary>
+
+Yes! Set in config:
+```ini
+default_interface = cli
+dry_run_mode = false  # Only after testing!
 ```
-✓ Check this README for your issue
-✓ Try both interfaces (GUI and CLI)
-✓ Verify settings are appropriate
-✓ Restart program and try again
+
+Then script with appropriate responses.
+
+</details>
+
+---
+
+## Advanced Usage
+
+### Command Line Arguments
+
+```bash
+# Show help
+python cScan.py --help
+
+# Direct configuration access
+python cScan.py --config
+
+# Future: Dry run mode
+python cScan.py --dry-run
+
+# Future: Specific path scan
+python cScan.py --path /specific/directory
 ```
 
-#### Information to Include
+### Performance Tips
 
-When reporting issues, please provide:
+1. **Close unnecessary applications** - Frees up locked files
+2. **Exclude media libraries** - If not cleaning media
+3. **Run during low usage** - Better performance
+4. **Use SSD** - Significantly faster scanning
 
-```
-System Information:
-• Windows version (Windows 10/11)
-• Python version (python --version)
-• Exact error message (copy/paste)
-• What you were doing when error occurred
+### Integration Ideas
+
+- **Scheduled Tasks** (Windows) / **Cron** (Unix)
+- **System maintenance scripts**
+- **Pre-backup cleanup routines**
+- **Disk space monitoring alerts**
+
+---
+
+## Contributing
+
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+### Development Setup
+
+```bash
+# Clone repository
+git clone https://github.com/yourusername/cScan.git
+cd cScan
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Unix
+venv\Scripts\activate     # Windows
+
+# Install development dependencies
+pip install -r requirements.txt
+pip install pytest black flake8
 ```
 
 ---
 
-## Technical Specifications
+## License
 
-```
-┌─ SYSTEM REQUIREMENTS ────────────────────────────┐
-│                                                  │
-│ Platform:        Windows 10/11                  │
-│ Python:          3.6 or higher                  │
-│ Dependencies:    None (built-in libraries only) │
-│ Memory Usage:    < 100 MB                       │
-│ Disk Space:      < 1 MB                         │
-│ Network:         No internet required           │
-│ Permissions:     Regular user account           │
-│                                                  │
-└──────────────────────────────────────────────────┘
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## File Structure
+## Acknowledgments
 
-```
-cScan/
-├── cScan.py                 # Main program file
-├── cScan_config.ini         # Configuration settings
-└── README.md               # This documentation
-
-Required Files:
-✓ cScan.py                  # DO NOT EDIT
-✓ cScan_config.ini          # Safe to edit
-✓ README.md                 # Documentation
-```
+- Built with Python's powerful standard library
+- Cross-platform support via psutil
+- Community feedback and contributions
 
 ---
 
-## Version Information
+## Support
 
-| Attribute | Value |
-|-----------|-------|
-| **Version** | 1.0 |
-| **Release Date** | January 2025 |
-| **Compatibility** | Windows 10/11 + Python 3.6+ |
-| **License** | Free for personal and educational use |
-| **Support** | Community-based |
+- **Issues**: [GitHub Issues](https://github.com/yourusername/cScan/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/cScan/discussions)
+- **Email**: support@example.com
 
 ---
 
-> **Need additional help?** Refer to the [Troubleshooting](#troubleshooting) section or check the [FAQ](#support--faq) for common questions and solutions. 
+> **Remember**: Always backup important data before running cleanup operations! 

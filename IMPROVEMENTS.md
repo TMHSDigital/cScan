@@ -2,7 +2,27 @@
 
 ## Overview
 
-Your cScan script has been significantly enhanced with comprehensive safety features and improved user experience. Here are the key improvements:
+Your cScan script has been significantly enhanced with comprehensive safety features, improved user experience, and full cross-platform support. Here are the key improvements:
+
+## 🌍 Cross-Platform Support
+
+### Platform Detection
+- **Automatic OS detection**: Detects Windows, macOS, and Linux automatically
+- **Platform-specific adaptations**: Adjusts paths, commands, and features based on OS
+- **Unified interface**: Same user experience across all platforms
+
+### Platform-Specific Features
+| Platform | Trash System | Temp Locations | System Protection |
+|----------|--------------|----------------|-------------------|
+| **Windows** | Recycle Bin (PowerShell) | `%TEMP%`, `AppData\Local\Temp` | C:\Windows, Program Files |
+| **macOS** | Trash (osascript) | `/tmp`, `~/Library/Caches` | /System, /Library, /Applications |
+| **Linux** | gio trash / ~/.local/share/Trash | `/tmp`, `~/.cache` | /bin, /usr, /lib, /etc |
+
+### Cross-Platform Benefits
+- **Write once, run everywhere**: Single codebase for all platforms
+- **Consistent behavior**: Same safety features and UI across OS
+- **Platform-aware safety**: Respects OS-specific system directories
+- **Native integration**: Uses native trash/recycle systems
 
 ## 🛡️ Safety Improvements
 
