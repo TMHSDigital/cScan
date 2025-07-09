@@ -1,9 +1,11 @@
 # cScan - Cross-Platform Cleanup Assistant
 
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg)](https://github.com/TMHSDigital/cScan)
-[![Python](https://img.shields.io/badge/python-3.6%2B-green.svg)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
-[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-brightgreen.svg)](https://TMHSDigital.github.io/cScan/)
+<p align="center">
+  <a href="https://github.com/TMHSDigital/cScan"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg" alt="Platform"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.6%2B-green.svg" alt="Python"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-orange.svg" alt="License"></a>
+  <a href="https://TMHSDigital.github.io/cScan/"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-brightgreen.svg" alt="Documentation"></a>
+</p>
 
 A comprehensive disk cleanup utility for **Windows**, **macOS**, and **Linux** that helps you reclaim disk space with advanced safety features and intelligent file analysis.
 
