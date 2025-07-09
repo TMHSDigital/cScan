@@ -1,0 +1,368 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+// Custom variables
+$primary-color: #2563eb;
+$secondary-color: #10b981;
+$accent-color: #f59e0b;
+$dark-color: #1f2937;
+$light-color: #f8fafc;
+$border-radius: 8px;
+$box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+// Enhanced header styling
+.page-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 3rem 0;
+  text-align: center;
+  
+  .project-name {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .project-tagline {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+  
+  .btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: $border-radius;
+    color: white;
+    font-weight: 600;
+    margin: 0 0.5rem;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+      box-shadow: $box-shadow;
+    }
+  }
+}
+
+// Enhanced main content
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  
+  // Typography improvements
+  h1, h2, h3, h4, h5, h6 {
+    color: $dark-color;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    border-bottom: 3px solid $primary-color;
+    padding-bottom: 0.5rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    color: $primary-color;
+    border-left: 4px solid $primary-color;
+    padding-left: 1rem;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    color: $secondary-color;
+  }
+  
+  // Badge styling
+  p img[alt="Platform"], 
+  p img[alt="Python"], 
+  p img[alt="License"] {
+    margin: 0 0.25rem;
+    border-radius: 4px;
+  }
+  
+  // Link styling
+  a {
+    color: $primary-color;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    
+    &:hover {
+      color: $secondary-color;
+      text-decoration: underline;
+    }
+  }
+  
+  // Card-like sections
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+  
+  .feature-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: $border-radius;
+    padding: 1.5rem;
+    box-shadow: $box-shadow;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    h3 {
+      color: $primary-color;
+      margin-top: 0;
+      border-left: none;
+      padding-left: 0;
+    }
+  }
+  
+  // Table styling
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    background: white;
+    border-radius: $border-radius;
+    overflow: hidden;
+    box-shadow: $box-shadow;
+    
+    th {
+      background: $primary-color;
+      color: white;
+      font-weight: 600;
+      padding: 1rem;
+      text-align: left;
+    }
+    
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    tr:nth-child(even) {
+      background: #f9fafb;
+    }
+    
+    tr:hover {
+      background: #f3f4f6;
+    }
+  }
+  
+  // Code styling
+  pre {
+    background: $dark-color;
+    color: #f8f8f2;
+    border-radius: $border-radius;
+    padding: 1.5rem;
+    overflow-x: auto;
+    box-shadow: $box-shadow;
+    
+    code {
+      background: none;
+      color: inherit;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+  }
+  
+  code {
+    background: #f3f4f6;
+    color: $accent-color;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  
+  // List styling
+  ul, ol {
+    li {
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+      
+      strong {
+        color: $primary-color;
+      }
+    }
+  }
+  
+  // Alert boxes
+  .alert {
+    padding: 1rem 1.5rem;
+    border-radius: $border-radius;
+    margin: 1.5rem 0;
+    border-left: 4px solid;
+    
+    &.alert-info {
+      background: #dbeafe;
+      border-color: $primary-color;
+      color: #1e40af;
+    }
+    
+    &.alert-success {
+      background: #d1fae5;
+      border-color: $secondary-color;
+      color: #065f46;
+    }
+    
+    &.alert-warning {
+      background: #fef3c7;
+      border-color: $accent-color;
+      color: #92400e;
+    }
+  }
+  
+  // Button styling
+  .btn-custom {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: $primary-color;
+    color: white;
+    text-decoration: none;
+    border-radius: $border-radius;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    
+    &:hover {
+      background: darken($primary-color, 10%);
+      transform: translateY(-2px);
+      box-shadow: $box-shadow;
+      color: white;
+      text-decoration: none;
+    }
+    
+    &.btn-secondary {
+      background: $secondary-color;
+      
+      &:hover {
+        background: darken($secondary-color, 10%);
+      }
+    }
+  }
+  
+  // Quick links grid
+  .quick-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+    
+    .link-card {
+      background: white;
+      border: 2px solid transparent;
+      border-radius: $border-radius;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: $box-shadow;
+      
+      &:hover {
+        border-color: $primary-color;
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+      
+      h3 {
+        color: $primary-color;
+        margin: 0 0 1rem 0;
+        border: none;
+        padding: 0;
+      }
+      
+      a {
+        font-weight: 600;
+        text-decoration: none;
+        
+        &:hover {
+          color: $secondary-color;
+        }
+      }
+    }
+  }
+}
+
+// Footer styling
+.site-footer {
+  background: $dark-color;
+  color: #9ca3af;
+  padding: 2rem 0;
+  text-align: center;
+  margin-top: 4rem;
+  
+  a {
+    color: #d1d5db;
+    
+    &:hover {
+      color: white;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .page-header {
+    padding: 2rem 1rem;
+    
+    .project-name {
+      font-size: 2rem;
+    }
+    
+    .btn {
+      display: block;
+      margin: 0.5rem 0;
+    }
+  }
+  
+  .main-content {
+    padding: 1rem;
+    
+    .feature-grid,
+    .quick-links {
+      grid-template-columns: 1fr;
+    }
+    
+    table {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Smooth scrolling
+html {
+  scroll-behavior: smooth;
+}
+
+// Loading animation
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-content > * {
+  animation: fadeInUp 0.6s ease-out;
+} 

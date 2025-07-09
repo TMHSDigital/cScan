@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    {% seo %}
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/images/apple-touch-icon.png' | relative_url }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/images/favicon-32x32.png' | relative_url }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/images/favicon-16x16.png' | relative_url }}">
+    
+    <style>
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        line-height: 1.6;
+        color: #374151;
+        margin: 0;
+        padding: 0;
+        background: #f9fafb;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="page-header" role="banner">
+      <h1 class="project-name">{{ page.title | default: site.title | default: site.github.repository_name }}</h1>
+      <h2 class="project-tagline">{{ page.description | default: site.description | default: site.github.project_tagline }}</h2>
+      
+      {% if site.github.is_project_page %}
+        <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
+      {% endif %}
+      
+      {% if site.github.is_user_page %}
+        <a href="{{ site.github.owner_url }}" class="btn">View on GitHub</a>
+      {% endif %}
+      
+      <a href="{{ site.github.zip_url }}" class="btn">Download .zip</a>
+      <a href="{{ site.github.tar_url }}" class="btn">Download .tar.gz</a>
+    </header>
+
+    <nav class="breadcrumb-nav">
+      <div class="container">
+        <ol class="breadcrumb">
+          <li><a href="{{ '/' | relative_url }}">Home</a></li>
+          {% if page.url != "/" %}
+            <li>{{ page.title | default: site.title }}</li>
+          {% endif %}
+        </ol>
+      </div>
+    </nav>
+
+    <main id="content" class="main-content" role="main">
+      {{ content }}
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>cScan</h3>
+            <p>Cross-platform cleanup assistant for Windows, macOS, and Linux.</p>
+            <div class="social-links">
+              <a href="{{ site.github.repository_url }}" aria-label="GitHub Repository">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+          
+          <div class="footer-section">
+            <h4>Documentation</h4>
+            <ul>
+              <li><a href="{{ '/README.html' | relative_url }}">Getting Started</a></li>
+              <li><a href="{{ '/CROSS_PLATFORM_GUIDE.html' | relative_url }}">Cross-Platform Guide</a></li>
+              <li><a href="{{ '/IMPROVEMENTS.html' | relative_url }}">Features</a></li>
+              <li><a href="{{ '/FIXES_APPLIED.html' | relative_url }}">Technical Fixes</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-section">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="{{ site.github.repository_url }}/issues">Report Issues</a></li>
+              <li><a href="{{ site.github.repository_url }}/discussions">Discussions</a></li>
+              <li><a href="{{ site.github.repository_url }}/releases">Releases</a></li>
+              <li><a href="{{ site.github.repository_url }}/blob/main/LICENSE">License</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-section">
+            <h4>Quick Actions</h4>
+            <div class="quick-actions">
+              <a href="{{ site.github.zip_url }}" class="action-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                Download ZIP
+              </a>
+              <a href="{{ site.github.repository_url }}" class="action-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+                View Source
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="footer-bottom">
+          <div class="footer-info">
+            <p>&copy; {{ 'now' | date: "%Y" }} {{ site.github.owner_name | default: "TMHSDigital" }}. All rights reserved.</p>
+            <p>Licensed under the <a href="{{ site.github.repository_url }}/blob/main/LICENSE">MIT License</a></p>
+          </div>
+          <div class="footer-meta">
+            <p>Built with <a href="https://pages.github.com/">GitHub Pages</a> • Last updated: {{ site.time | date: "%B %d, %Y" }}</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <style>
+      .breadcrumb-nav {
+        background: rgba(255, 255, 255, 0.95);
+        border-bottom: 1px solid #e5e7eb;
+        padding: 0.5rem 0;
+        backdrop-filter: blur(10px);
+      }
+      
+      .breadcrumb {
+        list-style: none;
+        display: flex;
+        padding: 0;
+        margin: 0;
+        font-size: 0.9rem;
+      }
+      
+      .breadcrumb li {
+        display: flex;
+        align-items: center;
+      }
+      
+      .breadcrumb li:not(:last-child)::after {
+        content: '/';
+        margin: 0 0.5rem;
+        color: #9ca3af;
+      }
+      
+      .breadcrumb a {
+        color: #6b7280;
+        text-decoration: none;
+      }
+      
+      .breadcrumb a:hover {
+        color: #2563eb;
+      }
+      
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+      
+      .footer-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+      }
+      
+      .footer-section h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: white;
+      }
+      
+      .footer-section h4 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        color: #d1d5db;
+      }
+      
+      .footer-section p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+      
+      .footer-section ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .footer-section ul li {
+        margin-bottom: 0.5rem;
+      }
+      
+      .footer-section ul li a {
+        color: #9ca3af;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+      
+      .footer-section ul li a:hover {
+        color: white;
+      }
+      
+      .social-links a {
+        color: #9ca3af;
+        margin-right: 1rem;
+        transition: color 0.3s ease;
+      }
+      
+      .social-links a:hover {
+        color: white;
+      }
+      
+      .quick-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        color: #d1d5db;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
+      
+      .action-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        transform: translateX(4px);
+      }
+      
+      .footer-bottom {
+        border-top: 1px solid #374151;
+        padding-top: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .footer-bottom p {
+        margin: 0;
+        font-size: 0.9rem;
+      }
+      
+      @media (max-width: 768px) {
+        .footer-content {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+          padding: 2rem 0;
+        }
+        
+        .footer-bottom {
+          flex-direction: column;
+          text-align: center;
+        }
+        
+        .container {
+          padding: 0 1rem;
+        }
+      }
+    </style>
+
+    <script>
+      // Add smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+      
+      // Add loading animation
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.5s ease-in-out';
+        setTimeout(() => {
+          document.body.style.opacity = '1';
+        }, 100);
+      });
+    </script>
+  </body>
+</html> 
