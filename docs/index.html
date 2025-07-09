@@ -68,36 +68,58 @@ title: cScan - Cross-Platform Cleanup Assistant
 </ul>
 
 ### Cross-Platform Support
-```mermaid
-graph TD
-    subgraph Windows
-        A1[<img src='https://img.icons8.com/color/48/000000/windows-10.png' width='40' /><br/><strong>Windows</strong>];
-        A2["<br/>🗑️<br/>Recycle Bin"];
-        A3["<br/>📁<br/>%TEMP%<br/>%LOCALAPPDATA%\\Temp"];
-        A1 -- "Trash System" --> A2;
-        A1 -- "Temp Locations" --> A3;
-    end
-
-    subgraph macOS
-        B1[<img src='https://img.icons8.com/ios-filled/50/000000/mac-os.png' width='40' /><br/><strong>macOS</strong>];
-        B2["<br/>🗑️<br/>Trash"];
-        B3["<br/>📁<br/>/tmp<br/>~/Library/Caches"];
-        B1 -- "Trash System" --> B2;
-        B1 -- "Temp Locations" --> B3;
-    end
-
-    subgraph Linux
-        C1[<img src='https://img.icons8.com/color/48/000000/linux--v1.png' width='40' /><br/><strong>Linux</strong>];
-        C2["<br/>🗑️<br/>gio trash"];
-        C3["<br/>📁<br/>/tmp<br/>~/.cache"];
-        C1 -- "Trash System" --> C2;
-        C1 -- "Temp Locations" --> C3;
-    end
-
-    style Windows fill:#f0f6ff,stroke:#a5b4fc,stroke-width:2px
-    style macOS fill:#f0f6ff,stroke:#a5b4fc,stroke-width:2px
-    style Linux fill:#f0f6ff,stroke:#a5b4fc,stroke-width:2px
-```
+<div class="platform-showcase">
+    <div class="platform-card windows">
+        <div class="platform-header">
+            <div class="platform-icon">🖥️</div>
+            <h4>Windows</h4>
+        </div>
+        <div class="platform-details">
+            <div class="detail-item">
+                <span class="detail-label">🗑️ Trash System:</span>
+                <span class="detail-value">Recycle Bin</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">📁 Temp Locations:</span>
+                <span class="detail-value"><code>%TEMP%</code><br><code>%LOCALAPPDATA%\Temp</code></span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="platform-card macos">
+        <div class="platform-header">
+            <div class="platform-icon">🍎</div>
+            <h4>macOS</h4>
+        </div>
+        <div class="platform-details">
+            <div class="detail-item">
+                <span class="detail-label">🗑️ Trash System:</span>
+                <span class="detail-value">Trash</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">📁 Temp Locations:</span>
+                <span class="detail-value"><code>/tmp</code><br><code>~/Library/Caches</code></span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="platform-card linux">
+        <div class="platform-header">
+            <div class="platform-icon">🐧</div>
+            <h4>Linux</h4>
+        </div>
+        <div class="platform-details">
+            <div class="detail-item">
+                <span class="detail-label">🗑️ Trash System:</span>
+                <span class="detail-value">gio trash</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">📁 Temp Locations:</span>
+                <span class="detail-value"><code>/tmp</code><br><code>~/.cache</code></span>
+            </div>
+        </div>
+    </div>
+</div>
 
 ### Safety First
 <ul>
