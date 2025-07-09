@@ -1,4 +1,4 @@
-# cScan - Cross-Platform Cleanup Assistant
+<p align="center"><h1>cScan - Cross-Platform Cleanup Assistant</h1></p>
 
 <p align="center">
   <a href="https://github.com/TMHSDigital/cScan"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg" alt="Platform"></a>
