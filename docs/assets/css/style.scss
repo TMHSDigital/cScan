@@ -3,691 +3,159 @@
 
 @import "{{ site.theme }}";
 
-// Custom variables
-$primary-color: #2563eb;
-$secondary-color: #10b981;
-$accent-color: #f59e0b;
-$dark-color: #1f2937;
-$light-color: #f8fafc;
-$border-radius: 8px;
-$box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+/*
+  ================================================================================
+  SIMPLE, ROBUST, AND PROFESSIONAL STYLES FOR CSCAN
+  - A fallback design to ensure site stability and readability.
+  - This design prioritizes compatibility with GitHub Pages and Jekyll.
+  ================================================================================
+*/
 
-// Enhanced header styling
+// Core Variables
+$primary-color: #2c3e50;
+$secondary-color: #3498db;
+$accent-color: #2980b9;
+$light-gray: #f8f9fa;
+$dark-text: #34495e;
+$light-text: #ecf0f1;
+$border-color: #e_aeaea;
+
+// Global Styles
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #ffffff;
+  color: $dark-text;
+}
+
+// Header
 .page-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 3rem 0;
+  background: $primary-color;
+  padding: 3rem 1rem;
   text-align: center;
+}
+
+.project-name {
+  font-size: 2.5rem;
+  color: white;
+  letter-spacing: 1px;
+}
+
+.project-tagline {
+  font-size: 1.1rem;
+  color: $light-text;
+  opacity: 0.9;
+}
+
+.btn {
+  border-color: $light-text;
+  color: $light-text;
   
-  .project-name {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  }
-  
-  .project-tagline {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-  }
-  
-  .btn {
-    background: rgba(255, 255, 255, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: $border-radius;
-    color: white;
-    font-weight: 600;
-    margin: 0 0.5rem;
-    padding: 0.75rem 1.5rem;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    
-    &:hover {
-      background: rgba(255, 255, 255, 0.3);
-      border-color: rgba(255, 255, 255, 0.5);
-      transform: translateY(-2px);
-      box-shadow: $box-shadow;
-    }
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
   }
 }
 
-// Enhanced main content
+// Main Content
 .main-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 3rem 2rem;
-  
-  // Typography improvements with better hierarchy
-  h1, h2, h3, h4, h5, h6 {
-    color: $dark-color;
-    font-weight: 700;
-    margin-top: 3rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    letter-spacing: -0.025em;
-  }
-  
-  h1 {
-    font-size: 3.5rem;
-    background: linear-gradient(135deg, $primary-color, $secondary-color);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 2rem;
-    position: relative;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 4px;
-      background: linear-gradient(135deg, $primary-color, $secondary-color);
-      border-radius: 2px;
-    }
-  }
-  
-  h2 {
-    font-size: 2.5rem;
-    color: $primary-color;
-    position: relative;
-    margin-top: 4rem;
-    margin-bottom: 2rem;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: -1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 3px;
-      background: $secondary-color;
-      border-radius: 2px;
-    }
-  }
-  
-  h3 {
-    font-size: 1.75rem;
-    color: $secondary-color;
-    margin-top: 2.5rem;
-    text-align: left;
-  }
-  
-  // Badge styling
-  p img[alt="Platform"], 
-  p img[alt="Python"], 
-  p img[alt="License"] {
-    margin: 0 0.25rem;
-    border-radius: 4px;
-  }
-  
-  // Enhanced paragraph and content styling
-  p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-    color: #4b5563;
-    text-align: center;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    
-    &.intro {
-      font-size: 1.3rem;
-      color: $dark-color;
-      font-weight: 500;
-      margin-bottom: 3rem;
-    }
-  }
-  
-  // Link styling
-  a {
-    color: $primary-color;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    position: relative;
-    
-    &:hover {
-      color: $secondary-color;
-      
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, $primary-color, $secondary-color);
-        animation: slideIn 0.3s ease-out;
-      }
-    }
-  }
-  
-  @keyframes slideIn {
-    from {
-      transform: scaleX(0);
-    }
-    to {
-      transform: scaleX(1);
-    }
-  }
-  
-  // Enhanced card sections with better visual hierarchy
-  .feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2.5rem;
-    margin: 4rem 0;
-    padding: 0 1rem;
-  }
-  
-  .feature-card {
-    background: white;
-    border: 2px solid transparent;
-    border-radius: 16px;
-    padding: 2.5rem 2rem;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, $primary-color, $secondary-color);
-      transform: scaleX(0);
-      transition: transform 0.4s ease;
-    }
-    
-    &:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-      border-color: rgba(37, 99, 235, 0.2);
-      
-      &::before {
-        transform: scaleX(1);
-      }
-      
-      h3 {
-        color: $secondary-color;
-      }
-    }
-    
-    h3 {
-      color: $primary-color;
-      margin-top: 0;
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-      font-weight: 700;
-      transition: color 0.3s ease;
-    }
-    
-    p {
-      color: #6b7280;
-      font-size: 1rem;
-      line-height: 1.6;
-      margin: 0;
-      text-align: center;
-    }
-  }
-  
-  // Enhanced table styling
-  table {
-    width: 100%;
-    max-width: 800px;
-    margin: 3rem auto;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    
-    th {
-      background: linear-gradient(135deg, $primary-color, darken($primary-color, 10%));
-      color: white;
-      font-weight: 700;
-      padding: 1.5rem 1rem;
-      text-align: center;
-      font-size: 1.1rem;
-      letter-spacing: 0.5px;
-    }
-    
-    td {
-      padding: 1.25rem 1rem;
-      border-bottom: 1px solid #e5e7eb;
-      text-align: center;
-      font-size: 1rem;
-      
-      strong {
-        color: $primary-color;
-        font-weight: 600;
-      }
-      
-      code {
-        background: #f3f4f6;
-        color: $dark-color;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        font-weight: 500;
-      }
-    }
-    
-    tr:nth-child(even) {
-      background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
-    }
-    
-    tr:hover {
-      background: linear-gradient(135deg, #f3f4f6 0%, #f9fafb 100%);
-      transform: scale(1.01);
-      transition: all 0.2s ease;
-    }
-  }
-  
-  // Code styling
-  pre {
-    background: $dark-color;
-    color: #f8f8f2;
-    border-radius: $border-radius;
-    padding: 1.5rem;
-    overflow-x: auto;
-    box-shadow: $box-shadow;
-    
-    code {
-      background: none;
-      color: inherit;
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
-  }
-  
-  code {
-    background: #f3f4f6;
-    color: $accent-color;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    font-weight: 600;
-  }
-  
-  // Enhanced feature highlights
-  .feature-highlights, .safety-features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin: 2rem 0 4rem 0;
-    
-    .highlight-item, .safety-item {
-      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 1.5rem;
-      text-align: center;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-      
-      &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        border-color: $primary-color;
-      }
-      
-      strong {
-        color: $primary-color;
-        font-weight: 700;
-        display: block;
-        margin-bottom: 0.5rem;
-        font-size: 1.1rem;
-      }
-    }
-  }
-  
-  .safety-features {
-    .safety-item {
-      strong {
-        color: $secondary-color;
-      }
-      
-      &:hover {
-        border-color: $secondary-color;
-      }
-    }
-  }
-  
-  // List styling
-  ul, ol {
-    max-width: 600px;
-    margin: 2rem auto;
-    text-align: left;
-    
-    li {
-      margin-bottom: 0.75rem;
-      line-height: 1.7;
-      font-size: 1.05rem;
-      
-      strong {
-        color: $primary-color;
-        font-weight: 600;
-      }
-    }
-  }
-  
-  // Enhanced alert boxes with modern design
-  .alert {
-    padding: 2rem 2.5rem;
-    border-radius: 16px;
-    margin: 3rem auto;
-    border: 2px solid;
-    text-align: center;
-    max-width: 800px;
-    position: relative;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: -1px;
-      left: -1px;
-      right: -1px;
-      bottom: -1px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-      z-index: -1;
-    }
-    
-    &.alert-info {
-      background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
-      border-color: $primary-color;
-      color: #1e40af;
-      
-      strong {
-        color: $primary-color;
-        font-weight: 700;
-      }
-    }
-    
-    &.alert-success {
-      background: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%);
-      border-color: $secondary-color;
-      color: #065f46;
-      
-      strong {
-        color: $secondary-color;
-        font-weight: 700;
-      }
-    }
-    
-    &.alert-warning {
-      background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
-      border-color: $accent-color;
-      color: #92400e;
-      
-      strong {
-        color: $accent-color;
-        font-weight: 700;
-      }
-    }
-    
-    p {
-      margin: 0;
-      font-size: 1.1rem;
-      line-height: 1.6;
-    }
-  }
-  
-  // Button styling
-  .btn-custom {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    background: $primary-color;
-    color: white;
-    text-decoration: none;
-    border-radius: $border-radius;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-    
-    &:hover {
-      background: darken($primary-color, 10%);
-      transform: translateY(-2px);
-      box-shadow: $box-shadow;
-      color: white;
-      text-decoration: none;
-    }
-    
-    &.btn-secondary {
-      background: $secondary-color;
-      
-      &:hover {
-        background: darken($secondary-color, 10%);
-      }
-    }
-  }
-  
-  // Enhanced quick links with modern styling
-  .quick-links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin: 4rem 0;
-    padding: 0 1rem;
-  }
-  
-  .link-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border: 2px solid transparent;
-    border-radius: 20px;
-    padding: 2.5rem 2rem;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    position: relative;
-    overflow: hidden;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(37, 99, 235, 0.03) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    
-    &:hover {
-      border-color: $primary-color;
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
-      
-      &::before {
-        opacity: 1;
-      }
-      
-      h3 {
-        color: $secondary-color;
-        transform: scale(1.05);
-      }
-    }
-    
-    h3 {
-      color: $primary-color;
-      margin: 0 0 1.5rem 0;
-      font-size: 1.4rem;
-      font-weight: 700;
-      transition: all 0.3s ease;
-    }
-    
-    p {
-      margin-bottom: 1rem;
-      color: #6b7280;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      
-      a {
-        display: inline-block;
-        font-weight: 600;
-        text-decoration: none;
-        margin-bottom: 0.5rem;
-        transition: all 0.3s ease;
-        
-        &:hover {
-          color: $secondary-color;
-          transform: translateX(4px);
-        }
-      }
-    }
-  }
-  
-  // Documentation grid styling
-  .doc-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin: 3rem 0;
-    
-    .doc-section {
-      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-      border: 2px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 2rem;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
-      transition: all 0.3s ease;
-      
-      &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
-        border-color: $primary-color;
-      }
-      
-      h3 {
-        margin-top: 0;
-        margin-bottom: 1.5rem;
-        color: $primary-color;
-        font-size: 1.4rem;
-        text-align: center;
-        font-weight: 700;
-      }
-    }
-    
-    .doc-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    
-    .doc-item {
-      display: flex;
-      flex-direction: column;
-      padding: 1rem 1.5rem;
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-      
-      &:hover {
-        transform: translateX(8px);
-        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
-        border-color: $primary-color;
-        
-        strong {
-          color: $secondary-color;
-        }
-      }
-      
-      strong {
-        color: $primary-color;
-        font-weight: 600;
-        font-size: 1.05rem;
-        margin-bottom: 0.25rem;
-        transition: color 0.3s ease;
-      }
-      
-      span {
-        color: #6b7280;
-        font-size: 0.9rem;
-        line-height: 1.4;
-      }
-    }
-  }
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 1rem;
 }
 
-// Footer styling
-.site-footer {
-  background: $dark-color;
-  color: #9ca3af;
-  padding: 2rem 0;
+h1, h2, h3, h4, h5, h6 {
+  color: $primary-color;
   text-align: center;
-  margin-top: 4rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid $secondary-color;
+  padding-bottom: 0.5rem;
+}
+
+a {
+  color: $secondary-color;
+  text-decoration: none;
+  font-weight: 600;
+  &:hover {
+    color: $accent-color;
+    text-decoration: underline;
+  }
+}
+
+// Card-like sections for better visual separation
+.feature-grid, .quick-links, .doc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.feature-card, .link-card, .doc-section {
+  background-color: $light-gray;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+}
+
+.feature-card h3, .link-card h3, .doc-section h3 {
+  border-bottom: none;
+  color: $primary-color;
+  margin-top: 0;
+}
+
+// Table styling
+table {
+  width: 100%;
+  margin: 2rem auto;
+  border-collapse: collapse;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  
+  th {
+    background-color: $primary-color;
+    color: white;
+    padding: 0.75rem;
+  }
+  
+  td {
+    padding: 0.75rem;
+    border: 1px solid $border-color;
+  }
+  
+  tr:nth-child(even) {
+    background-color: $light-gray;
+  }
+}
+
+// Code blocks
+pre {
+  background-color: $primary-color;
+  padding: 1rem;
+  border-radius: 8px;
+  color: $light-text;
+}
+
+code {
+  background-color: #e_cf0f1;
+  border-radius: 4px;
+  padding: 0.2rem 0.4rem;
+}
+
+// Footer
+.site-footer {
+  background: $primary-color;
+  color: $light-text;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-top: 3rem;
   
   a {
-    color: #d1d5db;
-    
-    &:hover {
-      color: white;
-    }
+    color: white;
   }
-}
-
-// Responsive design
-@media (max-width: 768px) {
-  .page-header {
-    padding: 2rem 1rem;
-    
-    .project-name {
-      font-size: 2rem;
-    }
-    
-    .btn {
-      display: block;
-      margin: 0.5rem 0;
-    }
-  }
-  
-  .main-content {
-    padding: 1rem;
-    
-    .feature-grid,
-    .quick-links {
-      grid-template-columns: 1fr;
-    }
-    
-    table {
-      font-size: 0.9rem;
-    }
-  }
-}
-
-// Smooth scrolling
-html {
-  scroll-behavior: smooth;
-}
-
-// Loading animation
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.main-content > * {
-  animation: fadeInUp 0.6s ease-out;
 } 
