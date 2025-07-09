@@ -17,7 +17,7 @@ https://YOUR-USERNAME.github.io/cScan/
 
 ### 2. Update Links
 
-Replace `yourusername` with your actual GitHub username in these files:
+Replace `TMHSDigital` with your actual GitHub username in these files (already done):
 - `docs/index.md`
 - `docs/_config.yml`
 - `README.md`

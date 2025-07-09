@@ -18,9 +18,9 @@ navigation:
 
 # GitHub metadata
 github:
-  repository_url: https://github.com/yourusername/cScan
-  zip_url: https://github.com/yourusername/cScan/archive/main.zip
-  tar_url: https://github.com/yourusername/cScan/archive/main.tar.gz
+  repository_url: https://github.com/TMHSDigital/cScan
+  zip_url: https://github.com/TMHSDigital/cScan/archive/main.zip
+  tar_url: https://github.com/TMHSDigital/cScan/archive/main.tar.gz
 
 # Plugins
 plugins:
