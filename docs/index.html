@@ -1,0 +1,157 @@
+---
+layout: default
+title: cScan - Cross-Platform Cleanup Assistant
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cScan Documentation</title>
+</head>
+<body>
+    <h1>cScan Documentation</h1>
+    
+    <p>Welcome to the official documentation for <strong>cScan</strong> - a comprehensive disk cleanup utility for Windows, macOS, and Linux.</p>
+    
+    <p>
+        <a href="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg" alt="Platform"></a>
+        <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.6%2B-green.svg" alt="Python"></a>
+        <a href="https://github.com/TMHSDigital/cScan/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-orange.svg" alt="License"></a>
+    </p>
+    
+    <h2>Quick Links</h2>
+    
+    <h3>Getting Started</h3>
+    <ul>
+        <li><a href="README.html"><strong>Installation &amp; Quick Start</strong></a> - Complete setup guide</li>
+        <li><a href="CROSS_PLATFORM_GUIDE.html"><strong>Cross-Platform Guide</strong></a> - Platform-specific features</li>
+    </ul>
+    
+    <h3>Features &amp; Improvements</h3>
+    <ul>
+        <li><a href="IMPROVEMENTS.html"><strong>Enhanced Features</strong></a> - What's new in cScan</li>
+        <li><a href="FIXES_APPLIED.html"><strong>Technical Fixes</strong></a> - Safety improvements explained</li>
+    </ul>
+    
+    <h3>Additional Resources</h3>
+    <ul>
+        <li><a href="DOCUMENTATION_REVIEW.html"><strong>Documentation Review</strong></a> - Documentation overview</li>
+        <li><a href="https://github.com/TMHSDigital/cScan"><strong>GitHub Repository</strong></a> - Source code</li>
+    </ul>
+    
+    <h2>What is cScan?</h2>
+    
+    <p>cScan helps you reclaim disk space by intelligently finding and removing:</p>
+    <ul>
+        <li><strong>Cache Files</strong> - Browser, app, and system caches</li>
+        <li><strong>Temporary Files</strong> - Old temp files (7+ days)</li>
+        <li><strong>Large Downloads</strong> - Files &gt;500MB in Downloads</li>
+        <li><strong>Old Installers</strong> - Setup files &gt;30 days old</li>
+        <li><strong>Crash Dumps</strong> - Debug and crash report files</li>
+    </ul>
+    
+    <h2>Key Features</h2>
+    
+    <h3>Smart File Analysis</h3>
+    <ul>
+        <li><strong>AI-like categorization</strong> with safety assessment</li>
+        <li><strong>Visual indicators</strong>: SAFE | USER | UNKNOWN | CRITICAL</li>
+        <li><strong>Smart suggestions</strong> for optimal cleanup</li>
+    </ul>
+    
+    <h3>Cross-Platform Support</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Platform</th>
+                <th>Trash System</th>
+                <th>Temp Locations</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Windows</strong></td>
+                <td>Recycle Bin</td>
+                <td><code>%TEMP%</code>, <code>%LOCALAPPDATA%\Temp</code></td>
+            </tr>
+            <tr>
+                <td><strong>macOS</strong></td>
+                <td>Trash</td>
+                <td><code>/tmp</code>, <code>~/Library/Caches</code></td>
+            </tr>
+            <tr>
+                <td><strong>Linux</strong></td>
+                <td>gio trash</td>
+                <td><code>/tmp</code>, <code>~/.cache</code></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>Safety First</h3>
+    <ul>
+        <li><strong>7 Protection Layers</strong> including system file protection</li>
+        <li><strong>Trash/Recycle Bin</strong> integration (files recoverable)</li>
+        <li><strong>Complete logging</strong> of all operations</li>
+        <li><strong>Dry-run mode</strong> for testing</li>
+    </ul>
+    
+    <h2>Installation</h2>
+    
+    <pre><code># Clone repository
+git clone https://github.com/TMHSDigital/cScan.git
+cd cScan
+
+# Install dependencies
+pip install psutil  # Windows
+pip3 install psutil # macOS/Linux
+
+# Run cScan
+python cScan.py   # Windows
+python3 cScan.py  # macOS/Linux
+</code></pre>
+    
+    <h2>Documentation Index</h2>
+    
+    <h3>User Guides</h3>
+    <ol>
+        <li><a href="README.html"><strong>README</strong></a> - Complete user manual</li>
+        <li><a href="CROSS_PLATFORM_GUIDE.html"><strong>Cross-Platform Guide</strong></a> - OS-specific instructions</li>
+    </ol>
+    
+    <h3>Technical Documentation</h3>
+    <ol>
+        <li><a href="IMPROVEMENTS.html"><strong>Improvements</strong></a> - Feature enhancements</li>
+        <li><a href="FIXES_APPLIED.html"><strong>Fixes Applied</strong></a> - Safety fixes explained</li>
+    </ol>
+    
+    <h3>Meta Documentation</h3>
+    <ol>
+        <li><a href="DOCUMENTATION_REVIEW.html"><strong>Documentation Review</strong></a> - Documentation overview</li>
+    </ol>
+    
+    <h2>Contributing</h2>
+    
+    <p>We welcome contributions! Please see our <a href="https://github.com/TMHSDigital/cScan">GitHub repository</a> for:</p>
+    <ul>
+        <li>Issue reporting</li>
+        <li>Feature requests</li>
+        <li>Pull requests</li>
+        <li>Discussions</li>
+    </ul>
+    
+    <h2>License</h2>
+    
+    <p>This project is licensed under the MIT License. See the <a href="https://github.com/TMHSDigital/cScan/blob/main/LICENSE">LICENSE</a> file for details.</p>
+    
+    <hr>
+    
+    <p align="center">
+        Made with dedication by the cScan team<br>
+        <a href="https://github.com/TMHSDigital/cScan">GitHub</a> •
+        <a href="https://github.com/TMHSDigital/cScan/issues">Issues</a> •
+        <a href="https://github.com/TMHSDigital/cScan/discussions">Discussions</a>
+    </p>
+</body>
+</html> 

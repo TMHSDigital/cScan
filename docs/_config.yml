@@ -1,6 +1,8 @@
 # Jekyll configuration for GitHub Pages
 title: cScan Documentation
 description: Cross-Platform Cleanup Assistant for Windows, macOS, and Linux
+baseurl: "/cScan"
+url: "https://TMHSDigital.github.io"
 theme: jekyll-theme-cayman
 show_downloads: true
 google_analytics: 
@@ -42,4 +44,5 @@ exclude:
   - vendor/bundle/
   - vendor/cache/
   - vendor/gems/
-  - vendor/ruby/ 
+  - vendor/ruby/
+  - README_LOCAL.md 
