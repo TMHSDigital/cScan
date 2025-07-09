@@ -53,9 +53,9 @@ for critical_path in self.critical_paths:
 
 ## Result
 The safety assessment now correctly identifies:
-- ✓ **Safe files**: Cache, temp, crashdumps in appropriate locations
-- ? **User files**: Downloads, documents, media files requiring confirmation  
-- ! **Unknown files**: Files that don't match clear patterns
-- ✗ **Critical files**: True system files and actively used files
+- **[SAFE] Safe files**: Cache, temp, crashdumps in appropriate locations
+- **[USER] User files**: Downloads, documents, media files requiring confirmation  
+- **[UNKN] Unknown files**: Files that don't match clear patterns
+- **[CRIT] Critical files**: True system files and actively used files
 
 Files are no longer incorrectly marked as critical, while still protecting important system files and data. 

@@ -26,7 +26,7 @@
 
 ## Features
 
-### 🚀 Core Features
+### Core Features
 
 | Feature | Description |
 |---------|-------------|
@@ -37,16 +37,16 @@
 | **Multiple Interfaces** | CLI and GUI options |
 | **Comprehensive Logging** | Complete audit trail of all operations |
 
-### 🎯 Smart Cleanup Categories
+### Smart Cleanup Categories
 
 ```
-✓ Cache Files        - Browser, app, and system caches
-✓ Temporary Files    - Old temp files (7+ days)
-✓ Large Downloads    - Files >500MB in Downloads
-✓ Old Installers     - Setup files >30 days old
-✓ Crash Dumps        - Debug and crash report files
-✓ Media Files        - Large videos and audio files
-✓ Backup Files       - Old backup files >30 days
+Cache Files        - Browser, app, and system caches
+Temporary Files    - Old temp files (7+ days)
+Large Downloads    - Files >500MB in Downloads
+Old Installers     - Setup files >30 days old
+Crash Dumps        - Debug and crash report files
+Media Files        - Large videos and audio files
+Backup Files       - Old backup files >30 days
 ```
 
 ---
@@ -187,7 +187,7 @@ Choose interface:
 
 ## Enhanced Features
 
-### 🧠 Smart File Analysis
+### Smart File Analysis
 
 Files are automatically categorized and assessed for safety:
 
@@ -196,19 +196,19 @@ File Display Format:
 SIZE SAFETY [CATEGORY] - PATH
 
 Examples:
-4.36 GB ✓ [cache] - ~/Library/Caches/app.cache
-1.22 GB ? [media] - ~/Downloads/movie.mp4  
-523 MB  ! [unknown] - ~/Documents/data.bin
-102 MB  ✗ [system] - /usr/lib/system.so
+4.36 GB [SAFE] cache - ~/Library/Caches/app.cache
+1.22 GB [USER] media - ~/Downloads/movie.mp4  
+523 MB  [UNKN] unknown - ~/Documents/data.bin
+102 MB  [CRIT] system - /usr/lib/system.so
 ```
 
 **Safety Indicators:**
-- ✓ = Safe to delete
-- ? = User confirmation needed
-- ! = Unknown (review carefully)
-- ✗ = Critical (protected)
+- [SAFE] = Safe to delete
+- [USER] = User confirmation needed
+- [UNKN] = Unknown (review carefully)
+- [CRIT] = Critical (protected)
 
-### 📊 Smart Suggestions
+### Smart Suggestions
 
 The system provides intelligent cleanup recommendations:
 
@@ -226,14 +226,14 @@ SMART CLEANUP SUGGESTIONS
    Files: 4 | Size: 5.18 GB | Safety: user
 ```
 
-### 🔄 Multiple Review Modes
+### Multiple Review Modes
 
 1. **Smart Suggestions** - AI-guided cleanup
 2. **Manual Review** - File-by-file control
 3. **Category View** - Browse by file type
 4. **Quick Actions** - Batch operations
 
-### 📝 Comprehensive Logging
+### Comprehensive Logging
 
 All operations are logged:
 - **Windows**: `%TEMP%\cScan_backups\deleted_files.json`
@@ -243,7 +243,7 @@ All operations are logged:
 
 ## Safety Features
 
-### 🛡️ Multi-Layer Protection
+### Multi-Layer Protection
 
 ```
 Protection Levels:
@@ -338,9 +338,9 @@ File Categories Found:
   Temp          12 files     1.24 GB
 
 Safety Analysis:
-  ✓ Safe         52 files
-  ? User        388 files
-  ! Unknown      69 files
+  Safe         52 files
+  User        388 files
+  Unknown      69 files
 
 ============================================================
 SMART CLEANUP SUGGESTIONS
@@ -350,7 +350,7 @@ SMART CLEANUP SUGGESTIONS
    Files: 61 | Size: 27.93 GB | Safety: safe
    
 Delete these files? (Y/n): y
-✓ Deleted 61 files
+[DONE] Deleted 61 files
 
 Total space freed: 27.93 GB
 ```
@@ -376,7 +376,7 @@ MIME Type: application/x-apple-diskimage
 ────────────────────────────────
 
 Action? (y/n/i/q): y
-✓ Deleted
+[DONE] Deleted
 ```
 
 ---
@@ -387,29 +387,29 @@ Action? (y/n/i/q): y
 
 #### Windows
 ```
-❌ PowerShell execution policy error
-✅ Run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+Problem: PowerShell execution policy error
+Solution: Run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
-❌ Python not found
-✅ Reinstall Python with "Add to PATH" checked
+Problem: Python not found
+Solution: Reinstall Python with "Add to PATH" checked
 ```
 
 #### macOS
 ```
-❌ Permission denied errors
-✅ Grant Terminal full disk access in System Preferences
+Problem: Permission denied errors
+Solution: Grant Terminal full disk access in System Preferences
 
-❌ Trash won't empty
-✅ Run: sudo rm -rf ~/.Trash/* (careful!)
+Problem: Trash won't empty
+Solution: Run: sudo rm -rf ~/.Trash/* (careful!)
 ```
 
 #### Linux
 ```
-❌ gio command not found
-✅ Install: sudo apt install glib2.0-bin
+Problem: gio command not found
+Solution: Install: sudo apt install glib2.0-bin
 
-❌ Permission errors on temp files
-✅ Script only deletes files you own
+Problem: Permission errors on temp files
+Solution: Script only deletes files you own
 ```
 
 ### Common Solutions

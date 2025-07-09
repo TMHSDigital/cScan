@@ -4,7 +4,7 @@
 
 Your cScan script has been significantly enhanced with comprehensive safety features, improved user experience, and full cross-platform support. Here are the key improvements:
 
-## 🌍 Cross-Platform Support
+## Cross-Platform Support
 
 ### Platform Detection
 - **Automatic OS detection**: Detects Windows, macOS, and Linux automatically
@@ -24,7 +24,7 @@ Your cScan script has been significantly enhanced with comprehensive safety feat
 - **Platform-aware safety**: Respects OS-specific system directories
 - **Native integration**: Uses native trash/recycle systems
 
-## 🛡️ Safety Improvements
+## Safety Improvements
 
 ### 1. **Smart File Analysis**
 - **File categorization**: Automatically categorizes files (system, media, documents, cache, temp, etc.)
@@ -44,7 +44,7 @@ Your cScan script has been significantly enhanced with comprehensive safety feat
 - **Usage detection**: Checks if files are currently in use
 - **Path analysis**: Categorizes based on file location patterns
 
-## 🎯 User Experience Improvements
+## User Experience Improvements
 
 ### 1. **Smart Cleanup Suggestions**
 Instead of just showing a list of large files, the script now provides intelligent suggestions:
@@ -66,12 +66,12 @@ SMART CLEANUP SUGGESTIONS
 ### 2. **Enhanced File Display**
 Files are now shown with context:
 ```
-   4.36 GB ✓ [models] - C:\Users\user\.ollama\models\blobs\sha256-...
-   2.54 GB ? [cache] - C:\Users\user\AppData\Local\pip\cache\...
-   1.61 GB ! [unknown] - C:\Users\user\AppData\Roaming\Cursor\...
+   4.36 GB [SAFE] models - C:\Users\user\.ollama\models\blobs\sha256-...
+   2.54 GB [USER] cache - C:\Users\user\AppData\Local\pip\cache\...
+   1.61 GB [UNKN] unknown - C:\Users\user\AppData\Roaming\Cursor\...
 ```
 
-**Icons**: ✓ = safe, ? = user confirmation needed, ! = unknown, ✗ = critical
+**Indicators**: [SAFE] = safe, [USER] = user confirmation needed, [UNKN] = unknown, [CRIT] = critical
 
 ### 3. **Multiple Cleanup Modes**
 - **Smart suggestions**: Review AI-generated cleanup recommendations
@@ -86,7 +86,7 @@ When reviewing files, you can now see:
 - Detailed path information
 - Size and age
 
-## 🔧 Configuration Enhancements
+## Configuration Enhancements
 
 ### New Settings Added:
 ```ini
@@ -104,7 +104,7 @@ dry_run_mode = false
 backup_before_delete = false
 ```
 
-## 📊 Smart Analysis Features
+## Smart Analysis Features
 
 ### 1. **File Categories**
 - **System**: .dll, .sys, .exe, .msi
@@ -123,7 +123,7 @@ backup_before_delete = false
 - **Old backups**: Backup files older than 30 days
 - **Large downloads**: Files >500MB in Downloads folder
 
-## 🚀 Usage Examples
+## Usage Examples
 
 ### Smart Cleanup Mode
 ```bash
@@ -151,7 +151,7 @@ python cScan.py
 # 3. Temp - 8 files (500 MB)
 ```
 
-## 🔒 Safety Guarantees
+## Safety Guarantees
 
 ### Files That Will NEVER Be Deleted:
 - System files in Windows directories
@@ -166,7 +166,7 @@ python cScan.py
 - Smart suggestions prioritize safe deletions
 - All deletions are logged for review
 
-## 📋 Requirements
+## Requirements
 
 The enhanced version requires:
 ```
@@ -175,7 +175,7 @@ psutil>=5.9.0
 
 Install with: `pip install psutil`
 
-## 🎯 Key Benefits
+## Key Benefits
 
 1. **Safer**: Multiple safety layers prevent accidental deletion of important files
 2. **Smarter**: AI-like suggestions help identify what's actually worth deleting
@@ -184,11 +184,11 @@ Install with: `pip install psutil`
 5. **Informative**: Rich file information helps you make better decisions
 6. **Logged**: Complete audit trail of all cleanup operations
 
-## 🔄 Migration from Original Version
+## Migration from Original Version
 
 The enhanced version is fully backward compatible. Your existing configuration will work, but you'll get additional safety features and smart suggestions automatically.
 
-## 📝 Logging
+## Logging
 
 All deletions are logged to: `%TEMP%\cScan_backups\deleted_files.json`
 

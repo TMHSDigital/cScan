@@ -7,11 +7,11 @@ title: cScan - Cross-Platform Cleanup Assistant
 
 Welcome to the official documentation for **cScan** - a comprehensive disk cleanup utility for Windows, macOS, and Linux.
 
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg)](https://github.com/yourusername/cScan)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg)](https://github.com/TMHSDigital/cScan)
 [![Python](https://img.shields.io/badge/python-3.6%2B-green.svg)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-orange.svg)](https://github.com/yourusername/cScan/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-orange.svg)](https://github.com/TMHSDigital/cScan/blob/main/LICENSE)
 
-## 🚀 Quick Links
+## Quick Links
 
 ### Getting Started
 - [**Installation & Quick Start**](README.md) - Complete setup guide
@@ -23,22 +23,22 @@ Welcome to the official documentation for **cScan** - a comprehensive disk clean
 
 ### Additional Resources
 - [**Documentation Review**](DOCUMENTATION_REVIEW.md) - Documentation overview
-- [**GitHub Repository**](https://github.com/yourusername/cScan) - Source code
+- [**GitHub Repository**](https://github.com/TMHSDigital/cScan) - Source code
 
-## 🎯 What is cScan?
+## What is cScan?
 
 cScan helps you reclaim disk space by intelligently finding and removing:
-- 🗑️ **Cache Files** - Browser, app, and system caches
-- 📁 **Temporary Files** - Old temp files (7+ days)
-- 💿 **Large Downloads** - Files >500MB in Downloads
-- 🔧 **Old Installers** - Setup files >30 days old
-- 💥 **Crash Dumps** - Debug and crash report files
+- **Cache Files** - Browser, app, and system caches
+- **Temporary Files** - Old temp files (7+ days)
+- **Large Downloads** - Files >500MB in Downloads
+- **Old Installers** - Setup files >30 days old
+- **Crash Dumps** - Debug and crash report files
 
-## ✨ Key Features
+## Key Features
 
 ### Smart File Analysis
 - **AI-like categorization** with safety assessment
-- **Visual indicators**: ✓ Safe | ? User Review | ! Unknown | ✗ Protected
+- **Visual indicators**: SAFE | USER | UNKNOWN | CRITICAL
 - **Smart suggestions** for optimal cleanup
 
 ### Cross-Platform Support
@@ -49,12 +49,12 @@ cScan helps you reclaim disk space by intelligently finding and removing:
 | **Linux** | gio trash | `/tmp`, `~/.cache` |
 
 ### Safety First
-- 🛡️ **7 Protection Layers** including system file protection
-- 🔄 **Trash/Recycle Bin** integration (files recoverable)
-- 📝 **Complete logging** of all operations
-- ⚠️ **Dry-run mode** for testing
+- **7 Protection Layers** including system file protection
+- **Trash/Recycle Bin** integration (files recoverable)
+- **Complete logging** of all operations
+- **Dry-run mode** for testing
 
-## 📊 Example Results
+## Example Results
 
 ```bash
 SMART CLEANUP SUGGESTIONS
@@ -69,11 +69,11 @@ SMART CLEANUP SUGGESTIONS
 Total space freed: 31.28 GB
 ```
 
-## 🔧 Installation
+## Installation
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/cScan.git
+git clone https://github.com/TMHSDigital/cScan.git
 cd cScan
 
 # Install dependencies
@@ -85,7 +85,7 @@ python cScan.py   # Windows
 python3 cScan.py  # macOS/Linux
 ```
 
-## 📚 Documentation Index
+## Documentation Index
 
 ### User Guides
 1. [**README**](README.md) - Complete user manual
@@ -98,30 +98,30 @@ python3 cScan.py  # macOS/Linux
 ### Meta Documentation
 1. [**Documentation Review**](DOCUMENTATION_REVIEW.md) - Documentation overview
 
-## 💡 Quick Tips
+## Quick Tips
 
 - **Always backup** important data before cleanup
 - **Start with smart suggestions** for safest cleanup
 - **Review unknown files** carefully before deletion
 - **Use dry-run mode** to preview changes
 
-## 🤝 Contributing
+## Contributing
 
-We welcome contributions! Please see our [GitHub repository](https://github.com/yourusername/cScan) for:
+We welcome contributions! Please see our [GitHub repository](https://github.com/TMHSDigital/cScan) for:
 - Issue reporting
 - Feature requests
 - Pull requests
 - Discussions
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/yourusername/cScan/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/TMHSDigital/cScan/blob/main/LICENSE) file for details.
 
 ---
 
 <p align="center">
-  Made with ❤️ by the cScan team<br>
-  <a href="https://github.com/yourusername/cScan">GitHub</a> •
-  <a href="https://github.com/yourusername/cScan/issues">Issues</a> •
-  <a href="https://github.com/yourusername/cScan/discussions">Discussions</a>
+  Made with dedication by the cScan team<br>
+  <a href="https://github.com/TMHSDigital/cScan">GitHub</a> •
+  <a href="https://github.com/TMHSDigital/cScan/issues">Issues</a> •
+  <a href="https://github.com/TMHSDigital/cScan/discussions">Discussions</a>
 </p> 

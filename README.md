@@ -1,21 +1,21 @@
 # cScan - Cross-Platform Cleanup Assistant
 
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg)](https://github.com/yourusername/cScan)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg)](https://github.com/TMHSDigital/cScan)
 [![Python](https://img.shields.io/badge/python-3.6%2B-green.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
-[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-brightgreen.svg)](https://yourusername.github.io/cScan/)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-brightgreen.svg)](https://TMHSDigital.github.io/cScan/)
 
 A comprehensive disk cleanup utility for **Windows**, **macOS**, and **Linux** that helps you reclaim disk space with advanced safety features and intelligent file analysis.
 
-## 📚 Documentation
+## Documentation
 
-**Full documentation is available at: [https://yourusername.github.io/cScan/](https://yourusername.github.io/cScan/)**
+**Full documentation is available at: [https://TMHSDigital.github.io/cScan/](https://TMHSDigital.github.io/cScan/)**
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/cScan.git
+git clone https://github.com/TMHSDigital/cScan.git
 cd cScan
 
 # Install dependencies
@@ -26,38 +26,38 @@ python cScan.py   # Windows
 python3 cScan.py  # macOS/Linux
 ```
 
-## ✨ Key Features
+## Key Features
 
-- 🌍 **Cross-Platform**: Works on Windows, macOS, and Linux
-- 🧠 **Smart Analysis**: AI-like file categorization and safety assessment
-- 🛡️ **Safety First**: 7 layers of protection, trash/recycle bin integration
-- 📊 **Smart Suggestions**: Intelligent cleanup recommendations
-- 🎯 **Multiple Modes**: GUI, CLI, and automated options
+- **Cross-Platform**: Works on Windows, macOS, and Linux
+- **Smart Analysis**: AI-like file categorization and safety assessment
+- **Safety First**: 7 layers of protection, trash/recycle bin integration
+- **Smart Suggestions**: Intelligent cleanup recommendations
+- **Multiple Modes**: GUI, CLI, and automated options
 
-## 📋 Requirements
+## Requirements
 
 - Python 3.6 or higher
 - psutil library (`pip install psutil`)
 
-## 📖 Documentation Links
+## Documentation Links
 
-- [Installation Guide](https://yourusername.github.io/cScan/README.html)
-- [Cross-Platform Guide](https://yourusername.github.io/cScan/CROSS_PLATFORM_GUIDE.html)
-- [Feature Documentation](https://yourusername.github.io/cScan/IMPROVEMENTS.html)
-- [Technical Details](https://yourusername.github.io/cScan/FIXES_APPLIED.html)
+- [Installation Guide](https://TMHSDigital.github.io/cScan/README.html)
+- [Cross-Platform Guide](https://TMHSDigital.github.io/cScan/CROSS_PLATFORM_GUIDE.html)
+- [Feature Documentation](https://TMHSDigital.github.io/cScan/IMPROVEMENTS.html)
+- [Technical Details](https://TMHSDigital.github.io/cScan/FIXES_APPLIED.html)
 
-## 🤝 Contributing
+## Contributing
 
-We welcome contributions! Please check our [documentation](https://yourusername.github.io/cScan/) for guidelines.
+We welcome contributions! Please check our [documentation](https://TMHSDigital.github.io/cScan/) for guidelines.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <p align="center">
-  <a href="https://yourusername.github.io/cScan/">Documentation</a> •
-  <a href="https://github.com/yourusername/cScan/issues">Issues</a> •
-  <a href="https://github.com/yourusername/cScan/discussions">Discussions</a>
+  <a href="https://TMHSDigital.github.io/cScan/">Documentation</a> •
+  <a href="https://github.com/TMHSDigital/cScan/issues">Issues</a> •
+  <a href="https://github.com/TMHSDigital/cScan/discussions">Discussions</a>
 </p> 
