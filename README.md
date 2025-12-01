@@ -41,6 +41,19 @@ python3 cScan.py  # macOS/Linux
 - **Safety First**: 7 layers of protection, trash/recycle bin integration
 - **Smart Suggestions**: Intelligent cleanup recommendations
 - **Multiple Modes**: GUI, CLI, and automated options
+- **Modern GUI**: Enhanced interface with modern styling and improved widget organization
+- **Advanced Configuration**: Customizable settings for development and browser cache paths
+- **Enhanced Safety**: Detailed safety assessments and structured file details display
+
+## Recent Improvements
+
+### Version Update - December 2025
+
+- **GUI Enhancement**: Completely redesigned interface with modern color scheme and improved layout
+- **Configuration Expansion**: Added support for development caches, browser caches, and application caches in `cScan_config.ini`
+- **Performance Optimization**: Updated large file threshold settings for better performance
+- **User Experience**: Implemented structured file details display with enhanced selection summary
+- **Safety Improvements**: Enhanced file selection and deletion processes with detailed safety assessments and user-friendly notifications
 
 ## Requirements
 
