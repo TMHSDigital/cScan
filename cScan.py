@@ -50,7 +50,10 @@ class FileAnalyzer:
             'virtual': ['.vhd', '.vhdx', '.vmdk', '.vdi', '.qcow2'],
             'models': ['.bin', '.gguf', '.model', '.safetensors', '.weights'],
             'crashdumps': ['.dmp', '.mdmp', '.hdmp'],
-            'cache_patterns': ['cache', 'Cache', 'temp', 'Temp', 'tmp']
+            'dev_temp': ['.pdb', '.obj', '.ilk', '.pch', '.suo', '.user'],  # Safe dev temp files
+            'packages': ['.nupkg', '.vsix', '.tgz', '.whl', '.gem'],         # Package files
+            'thumbnails': ['.db'],  # Thumbnail cache files
+            'cache_patterns': ['cache', 'Cache', 'temp', 'Temp', 'tmp', '_cacache', 'node_modules', 'thumbcache']
         }
         
     def _get_critical_paths(self):
@@ -145,6 +148,18 @@ class FileAnalyzer:
         # Check for specific path patterns first
         if any(pattern in path_lower for pattern in self.file_categories['cache_patterns']):
             return 'cache'
+            
+        # Enhanced development file detection
+        if 'node_modules' in path_lower:
+            return 'dev_dependencies'
+        elif any(pattern in path_lower for pattern in ['\\bin\\debug', '\\bin\\release', '\\obj\\']):
+            return 'build_output'
+        elif '_cacache' in path_lower or 'pip/cache' in path_lower or 'nuget/v3-cache' in path_lower:
+            return 'dev_cache'
+            
+        # Thumbnail cache files
+        if 'thumbcache' in filename or ('iconcache' in filename and ext == '.db'):
+            return 'thumbnails'
             
         # Platform-specific path patterns
         if IS_WINDOWS:
@@ -812,6 +827,9 @@ class ConfigManager:
                 'include_videos': 'true',
                 'include_music': 'true',
                 'include_temp_folders': 'true',
+                'include_dev_caches': 'false',  # Conservative default
+                'include_browser_caches': 'false',  # Conservative default
+                'include_app_caches': 'false',  # Conservative default
                 'custom_scan_paths': ''  # comma-separated additional paths
             },
             'FileTypes': {
@@ -935,6 +953,62 @@ class ConfigManager:
                     os.environ.get("TMP", ""),
                     os.path.join(user_profile, "AppData", "Local", "Temp"),
                 ])
+            
+            # Safe development cache directories (disabled by default for safety)
+            if self.getboolean('Paths', 'include_dev_caches', False):
+                dev_cache_paths = [
+                    os.path.join(user_profile, ".npm", "_cacache"),      # NPM cache only
+                    os.path.join(user_profile, "AppData", "Local", "pip", "cache"),  # Python pip cache
+                    os.path.join(user_profile, "AppData", "Local", "NuGet", "v3-cache"),  # NuGet cache
+                    os.path.join(user_profile, ".gradle", "caches"),    # Gradle cache
+                ]
+                # Only add paths that exist
+                paths.extend([p for p in dev_cache_paths if os.path.exists(p)])
+            
+            # Browser cache directories (disabled by default for safety)
+            if self.getboolean('Paths', 'include_browser_caches', False):
+                browser_cache_paths = [
+                    # Chrome caches (cache only, not user data)
+                    os.path.join(user_profile, "AppData", "Local", "Google", "Chrome", "User Data", "Default", "Cache"),
+                    os.path.join(user_profile, "AppData", "Local", "Google", "Chrome", "User Data", "Default", "Code Cache"),
+                    
+                    # Firefox cache
+                    os.path.join(user_profile, "AppData", "Local", "Mozilla", "Firefox", "Profiles", "*", "cache2"),
+                    
+                    # Edge cache
+                    os.path.join(user_profile, "AppData", "Local", "Microsoft", "Edge", "User Data", "Default", "Cache"),
+                    os.path.join(user_profile, "AppData", "Local", "Microsoft", "Edge", "User Data", "Default", "Code Cache"),
+                ]
+                # Handle wildcard paths for Firefox
+                import glob
+                expanded_paths = []
+                for path in browser_cache_paths:
+                    if '*' in path:
+                        expanded_paths.extend(glob.glob(path))
+                    elif os.path.exists(path):
+                        expanded_paths.append(path)
+                paths.extend(expanded_paths)
+            
+            # Application cache directories (disabled by default for safety)  
+            if self.getboolean('Paths', 'include_app_caches', False):
+                app_cache_paths = [
+                    # Microsoft Teams cache
+                    os.path.join(user_profile, "AppData", "Roaming", "Microsoft", "Teams", "Cache"),
+                    os.path.join(user_profile, "AppData", "Roaming", "Microsoft", "Teams", "blob_storage"),
+                    
+                    # Discord cache
+                    os.path.join(user_profile, "AppData", "Roaming", "discord", "Cache"),
+                    os.path.join(user_profile, "AppData", "Roaming", "discord", "Code Cache"),
+                    
+                    # Slack cache
+                    os.path.join(user_profile, "AppData", "Roaming", "Slack", "Cache"),
+                    os.path.join(user_profile, "AppData", "Roaming", "Slack", "Code Cache"),
+                    
+                    # Spotify cache
+                    os.path.join(user_profile, "AppData", "Local", "Spotify", "Data"),
+                ]
+                # Only add paths that exist
+                paths.extend([p for p in app_cache_paths if os.path.exists(p)])
         else:
             # macOS/Linux
             home = os.path.expanduser("~")
@@ -978,6 +1052,75 @@ class ConfigManager:
                         os.environ.get("TMPDIR", "/tmp"),
                     ])
                 paths.extend(temp_paths)
+            
+            # Safe development cache directories (disabled by default for safety)
+            if self.getboolean('Paths', 'include_dev_caches', False):
+                dev_cache_paths = [
+                    os.path.join(home, ".npm", "_cacache"),      # NPM cache
+                    os.path.join(home, ".cache", "pip"),         # Python pip cache
+                    os.path.join(home, ".gradle", "caches"),     # Gradle cache
+                ]
+                if IS_MAC:
+                    dev_cache_paths.extend([
+                        os.path.join(home, "Library", "Caches", "pip"),  # macOS pip cache
+                        os.path.join(home, "Library", "Caches", "Homebrew"),  # Homebrew cache
+                    ])
+                # Only add paths that exist
+                paths.extend([p for p in dev_cache_paths if os.path.exists(p)])
+            
+            # Browser cache directories (disabled by default for safety)
+            if self.getboolean('Paths', 'include_browser_caches', False):
+                browser_cache_paths = []
+                if IS_MAC:
+                    browser_cache_paths = [
+                        # Chrome cache
+                        os.path.join(home, "Library", "Caches", "Google", "Chrome", "Default"),
+                        # Firefox cache
+                        os.path.join(home, "Library", "Caches", "Firefox", "Profiles", "*", "cache2"),
+                        # Safari cache
+                        os.path.join(home, "Library", "Caches", "com.apple.Safari"),
+                    ]
+                else:  # Linux
+                    browser_cache_paths = [
+                        # Chrome cache
+                        os.path.join(home, ".cache", "google-chrome", "Default"),
+                        # Firefox cache
+                        os.path.join(home, ".cache", "mozilla", "firefox", "*", "cache2"),
+                    ]
+                
+                # Handle wildcard paths and existing paths
+                import glob
+                expanded_paths = []
+                for path in browser_cache_paths:
+                    if '*' in path:
+                        expanded_paths.extend(glob.glob(path))
+                    elif os.path.exists(path):
+                        expanded_paths.append(path)
+                paths.extend(expanded_paths)
+            
+            # Application cache directories (disabled by default for safety)
+            if self.getboolean('Paths', 'include_app_caches', False):
+                app_cache_paths = []
+                if IS_MAC:
+                    app_cache_paths = [
+                        # Teams cache
+                        os.path.join(home, "Library", "Caches", "com.microsoft.teams2"),
+                        # Discord cache  
+                        os.path.join(home, "Library", "Caches", "com.hnc.Discord"),
+                        # Slack cache
+                        os.path.join(home, "Library", "Caches", "com.tinyspeck.slackmacgap"),
+                        # Spotify cache
+                        os.path.join(home, "Library", "Caches", "com.spotify.client"),
+                    ]
+                else:  # Linux
+                    app_cache_paths = [
+                        # Discord cache
+                        os.path.join(home, ".config", "discord", "Cache"),
+                        # Slack cache
+                        os.path.join(home, ".config", "Slack", "Cache"),
+                    ]
+                # Only add paths that exist
+                paths.extend([p for p in app_cache_paths if os.path.exists(p)])
         
         # Add custom paths
         custom_paths = self.get('Paths', 'custom_scan_paths', '')
@@ -1050,7 +1193,10 @@ class ConfigManager:
             ('include_pictures', 'Pictures'),
             ('include_videos', 'Videos'),
             ('include_music', 'Music'),
-            ('include_temp_folders', 'Temp Folders')
+            ('include_temp_folders', 'Temp Folders'),
+            ('include_dev_caches', 'Development Caches (NPM, pip, etc.)'),
+            ('include_browser_caches', 'Browser Caches (Chrome, Firefox, Edge)'),
+            ('include_app_caches', 'Application Caches (Teams, Discord, Slack)')
         ]
         
         for i, (key, label) in enumerate(path_options):
@@ -1556,79 +1702,203 @@ def empty_recycle_bin():
 class CleanupGUI:
     def __init__(self):
         self.root = tk.Tk()
-        self.root.title("User Space Cleanup Assistant")
-        self.root.geometry("900x700")
+        self.root.title("cScan - Storage Cleanup Assistant")
+        self.root.geometry("1000x750")
         self.root.resizable(True, True)
+        self.root.configure(bg='#f0f0f0')
+        
+        # Modern color scheme
+        self.colors = {
+            'primary': '#2196F3',      # Blue
+            'primary_dark': '#1976D2', # Darker blue
+            'success': '#4CAF50',      # Green
+            'warning': '#FF9800',      # Orange
+            'danger': '#F44336',       # Red
+            'background': '#f0f0f0',   # Light gray
+            'surface': '#ffffff',      # White
+            'text': '#212121',         # Dark gray
+            'text_secondary': '#757575' # Medium gray
+        }
+        
+        # Configure modern style
+        self.setup_styles()
         
         # Variables
         self.large_files = []
         self.total_freed = 0
         
         self.create_widgets()
+    
+    def setup_styles(self):
+        """Configure modern ttk styles"""
+        style = ttk.Style()
+        
+        # Configure modern button style
+        style.configure('Modern.TButton',
+                       font=('Segoe UI', 10),
+                       padding=(15, 8))
+        
+        # Primary button style
+        style.configure('Primary.TButton',
+                       font=('Segoe UI', 10, 'bold'),
+                       padding=(15, 10))
+        
+        # Large button style  
+        style.configure('Large.TButton',
+                       font=('Segoe UI', 11),
+                       padding=(20, 12))
+        
+        # Modern label styles
+        style.configure('Title.TLabel',
+                       font=('Segoe UI', 18, 'bold'),
+                       foreground=self.colors['text'])
+        
+        style.configure('Subtitle.TLabel',
+                       font=('Segoe UI', 12),
+                       foreground=self.colors['text_secondary'])
+        
+        style.configure('Status.TLabel',
+                       font=('Segoe UI', 10),
+                       foreground=self.colors['primary'])
+        
+        # Modern frame style
+        style.configure('Card.TFrame',
+                       relief='solid',
+                       borderwidth=1)
+        
+        # Modern progressbar
+        style.configure('Modern.Horizontal.TProgressbar',
+                       troughcolor='#e0e0e0',
+                       borderwidth=0,
+                       lightcolor=self.colors['primary'],
+                       darkcolor=self.colors['primary'])
         
     def create_widgets(self):
-        # Main frame
-        main_frame = ttk.Frame(self.root, padding="10")
-        main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+        # Main container with modern styling
+        main_frame = ttk.Frame(self.root, style='Card.TFrame')
+        main_frame.pack(fill=tk.BOTH, expand=True, padx=15, pady=15)
         
-        # Configure grid weights
-        self.root.columnconfigure(0, weight=1)
-        self.root.rowconfigure(0, weight=1)
-        main_frame.columnconfigure(1, weight=1)
-        main_frame.rowconfigure(3, weight=1)
+        # Header section
+        header_frame = ttk.Frame(main_frame)
+        header_frame.pack(fill=tk.X, pady=(0, 20))
         
-        # Title
-        title_label = ttk.Label(main_frame, text="User Space Cleanup Assistant", 
-                               font=('Arial', 16, 'bold'))
-        title_label.grid(row=0, column=0, columnspan=3, pady=(0, 20))
+        # Modern title with icon
+        title_frame = ttk.Frame(header_frame)
+        title_frame.pack(fill=tk.X)
         
-        # Status display
-        self.status_label = ttk.Label(main_frame, text="Ready to scan...")
-        self.status_label.grid(row=1, column=0, columnspan=3, pady=(0, 10))
+        title_label = ttk.Label(title_frame, text="🧹 cScan", style='Title.TLabel')
+        title_label.pack(side=tk.LEFT)
         
-        # Progress bar
-        self.progress = ttk.Progressbar(main_frame, length=400, mode='determinate')
-        self.progress.grid(row=2, column=0, columnspan=3, pady=(0, 10), sticky=(tk.W, tk.E))
+        subtitle_label = ttk.Label(title_frame, text="Storage Cleanup Assistant", style='Subtitle.TLabel')
+        subtitle_label.pack(side=tk.LEFT, padx=(10, 0))
         
-        # Text output area (mirrors terminal output)
-        self.output_text = scrolledtext.ScrolledText(main_frame, height=20, width=80)
-        self.output_text.grid(row=3, column=0, columnspan=3, pady=(0, 10), sticky=(tk.W, tk.E, tk.N, tk.S))
+        # Stats display (modern card-like display)
+        stats_frame = ttk.LabelFrame(main_frame, text="Storage Analysis", padding=10)
+        stats_frame.pack(fill=tk.X, pady=(0, 15))
         
-        # Buttons frame
-        buttons_frame = ttk.Frame(main_frame)
-        buttons_frame.grid(row=4, column=0, columnspan=3, pady=(10, 0))
+        # Status and progress section
+        status_frame = ttk.Frame(stats_frame)
+        status_frame.pack(fill=tk.X, pady=(0, 10))
         
-        # Buttons
-        self.scan_btn = ttk.Button(buttons_frame, text="Start Scan", command=self.start_scan)
-        self.scan_btn.pack(side=tk.LEFT, padx=(0, 10))
+        self.status_label = ttk.Label(status_frame, text="Ready to scan...", style='Status.TLabel')
+        self.status_label.pack(side=tk.LEFT)
         
-        self.clean_temp_btn = ttk.Button(buttons_frame, text="Clean Temp Files", 
+        # Modern progress bar
+        self.progress = ttk.Progressbar(stats_frame, style='Modern.Horizontal.TProgressbar', 
+                                      length=500, mode='determinate')
+        self.progress.pack(fill=tk.X, pady=(10, 0))
+        
+        # Output section with improved styling
+        output_frame = ttk.LabelFrame(main_frame, text="Scan Results", padding=10)
+        output_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 15))
+        
+        # Enhanced text output with modern styling
+        self.output_text = scrolledtext.ScrolledText(
+            output_frame, 
+            height=18, 
+            font=('Consolas', 9),
+            wrap=tk.WORD,
+            bg=self.colors['surface'],
+            fg=self.colors['text'],
+            selectbackground=self.colors['primary'],
+            selectforeground='white',
+            relief='flat',
+            borderwidth=0
+        )
+        self.output_text.pack(fill=tk.BOTH, expand=True)
+        
+        # Modern button section
+        action_frame = ttk.LabelFrame(main_frame, text="Actions", padding=15)
+        action_frame.pack(fill=tk.X)
+        
+        # Primary actions row
+        primary_row = ttk.Frame(action_frame)
+        primary_row.pack(fill=tk.X, pady=(0, 10))
+        
+        self.scan_btn = ttk.Button(primary_row, text="🔍 Start Scan", 
+                                  style='Primary.TButton', command=self.start_scan)
+        self.scan_btn.pack(side=tk.LEFT, padx=(0, 15))
+        
+        # Cleanup actions row
+        cleanup_row = ttk.Frame(action_frame)
+        cleanup_row.pack(fill=tk.X, pady=(0, 10))
+        
+        self.clean_temp_btn = ttk.Button(cleanup_row, text="🗑️ Clean Temp Files", 
+                                        style='Modern.TButton',
                                         command=self.clean_temp_files, state='disabled')
         self.clean_temp_btn.pack(side=tk.LEFT, padx=(0, 10))
         
-        # Platform-specific button text
-        trash_button_text = "Empty Recycle Bin" if IS_WINDOWS else "Empty Trash"
-        self.empty_recycle_btn = ttk.Button(buttons_frame, text=trash_button_text, 
+        # Platform-specific button text with icons
+        if IS_WINDOWS:
+            trash_text = "♻️ Empty Recycle Bin"
+        else:
+            trash_text = "🗑️ Empty Trash"
+            
+        self.empty_recycle_btn = ttk.Button(cleanup_row, text=trash_text,
+                                           style='Modern.TButton',
                                            command=self.empty_recycle_bin, state='disabled')
         self.empty_recycle_btn.pack(side=tk.LEFT, padx=(0, 10))
         
-        self.config_btn = ttk.Button(buttons_frame, text="Settings", command=self.show_config)
+        # Secondary actions row
+        secondary_row = ttk.Frame(action_frame)
+        secondary_row.pack(fill=tk.X)
+        
+        self.config_btn = ttk.Button(secondary_row, text="⚙️ Settings", 
+                                    style='Modern.TButton', command=self.show_config)
         self.config_btn.pack(side=tk.LEFT, padx=(0, 10))
         
-        self.exit_btn = ttk.Button(buttons_frame, text="Exit", command=self.root.quit)
+        # Exit button on the right
+        self.exit_btn = ttk.Button(secondary_row, text="❌ Exit", 
+                                  style='Modern.TButton', command=self.root.quit)
         self.exit_btn.pack(side=tk.RIGHT)
         
-    def log_output(self, message):
-        """Add message to both GUI and terminal"""
+    def log_output(self, message, level="info"):
+        """Add message to both GUI and terminal with color coding"""
         print(message)  # Print to terminal
-        self.output_text.insert(tk.END, message + "\n")
+        
+        # Configure text tags for different message types
+        if not hasattr(self, '_tags_configured'):
+            self.output_text.tag_configure("info", foreground=self.colors['text'])
+            self.output_text.tag_configure("success", foreground=self.colors['success'], font=('Consolas', 9, 'bold'))
+            self.output_text.tag_configure("warning", foreground=self.colors['warning'], font=('Consolas', 9, 'bold'))
+            self.output_text.tag_configure("error", foreground=self.colors['danger'], font=('Consolas', 9, 'bold'))
+            self.output_text.tag_configure("header", foreground=self.colors['primary'], font=('Consolas', 10, 'bold'))
+            self._tags_configured = True
+        
+        # Add timestamp for better tracking
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        formatted_message = f"[{timestamp}] {message}\n"
+        
+        # Insert with appropriate styling
+        self.output_text.insert(tk.END, formatted_message, level)
         self.output_text.see(tk.END)
         self.root.update_idletasks()
         
     def update_status(self, status):
-        """Update status label and log"""
-        self.status_label.config(text=status)
-        self.log_output(f"Status: {status}")
+        """Update status label with modern styling"""
+        self.status_label.config(text=f"📊 {status}")
+        self.log_output(f"Status: {status}", "info")
         
     def start_scan(self):
         """Start the file scanning process"""
@@ -1660,29 +1930,29 @@ class CleanupGUI:
             
             # Show scan areas
             accessible_paths = [path for path in scan_paths if path and os.path.exists(path)]
-            self.log_output("\nWill scan these areas:")
+            self.log_output("\n📂 Scanning these locations:", "header")
             for path in accessible_paths:
-                self.log_output(f"  • {path}")
+                self.log_output(f"  📁 {path}")
             
             # Find large files with progress updates
             self.large_files = self.find_large_files_gui(scan_paths, large_file_size_mb)
             
             if self.large_files:
-                self.log_output(f"\nFound {len(self.large_files)} large files:")
+                self.log_output(f"\n🎯 Found {len(self.large_files)} large files:", "header")
                 for path, size in sorted(self.large_files, key=lambda x: -x[1])[:50]:
                     self.log_output(f"  {get_size_readable(size):>10} - {path}")
                 
                 total_large = sum(size for _, size in self.large_files)
-                self.log_output(f"\nTotal size of large files: {get_size_readable(total_large)}")
+                self.log_output(f"\n📏 Total size of large files: {get_size_readable(total_large)}", "success")
                 
                 # Create file selection window
                 self.root.after(0, self.show_file_selection)
             else:
-                self.log_output("No large files found.")
+                self.log_output("✅ No large files found.", "success")
                 self.root.after(0, self.enable_cleanup_buttons)
                 
         except Exception as e:
-            self.log_output(f"Error during scan: {e}")
+            self.log_output(f"❌ Error during scan: {e}", "error")
             self.root.after(0, self.enable_scan_button)
     
     def find_large_files_gui(self, scan_paths, min_size_mb):
@@ -1746,65 +2016,752 @@ class CleanupGUI:
         return large_files
     
     def show_file_selection(self):
-        """Show window for selecting files to delete"""
+        """Show enhanced file selection window with safety features"""
         selection_window = tk.Toplevel(self.root)
-        selection_window.title("Select Files to Delete")
-        selection_window.geometry("800x600")
+        selection_window.title("🗂️ File Cleanup Manager")
+        selection_window.geometry("1200x800")
+        selection_window.configure(bg=self.colors['background'])
         
-        # File list with checkboxes
-        frame = ttk.Frame(selection_window, padding="10")
+        # Main container
+        main_container = ttk.Frame(selection_window)
+        main_container.pack(fill=tk.BOTH, expand=True, padx=15, pady=15)
+        
+        # Header with safety notice
+        header_frame = ttk.LabelFrame(main_container, text="⚠️ Safety First", padding=10)
+        header_frame.pack(fill=tk.X, pady=(0, 10))
+        
+        safety_text = tk.Text(header_frame, height=3, bg=self.colors['surface'], 
+                             font=('Segoe UI', 9), wrap=tk.WORD, relief='flat')
+        safety_text.pack(fill=tk.X)
+        safety_text.insert(tk.END, 
+            "🛡️ Files are safely moved to Recycle Bin/Trash by default\n"
+            "🔍 Click any file to see details and preview\n"
+            "📁 Use filters to focus on specific file types or locations")
+        safety_text.configure(state='disabled')
+        
+        # Create paned window for side-by-side layout
+        paned = ttk.PanedWindow(main_container, orient=tk.HORIZONTAL)
+        paned.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
+        
+        # Left panel - File list
+        left_panel = ttk.Frame(paned)
+        paned.add(left_panel, weight=2)
+        
+        # File list header with controls
+        list_header = ttk.Frame(left_panel)
+        list_header.pack(fill=tk.X, pady=(0, 10))
+        
+        ttk.Label(list_header, text="📋 Files Found:", style='Subtitle.TLabel').pack(side=tk.LEFT)
+        
+        # Filters frame
+        filters_frame = ttk.Frame(list_header)
+        filters_frame.pack(side=tk.RIGHT)
+        
+        ttk.Label(filters_frame, text="Filter:").pack(side=tk.LEFT, padx=(0, 5))
+        
+        self.filter_var = tk.StringVar(value="All")
+        filter_combo = ttk.Combobox(filters_frame, textvariable=self.filter_var, 
+                                   values=["All", "Safe to Delete", "User Files", "Large (>1GB)", "Recent (<7 days)"],
+                                   state="readonly", width=15)
+        filter_combo.pack(side=tk.LEFT)
+        filter_combo.bind('<<ComboboxSelected>>', self.apply_file_filter)
+        
+        # File list with enhanced display
+        list_container = ttk.Frame(left_panel)
+        list_container.pack(fill=tk.BOTH, expand=True)
+        
+        # Create treeview for better file display
+        columns = ('Select', 'Size', 'Type', 'Safety', 'Name', 'Location')
+        self.file_tree = ttk.Treeview(list_container, columns=columns, show='headings', height=20)
+        
+        # Configure columns
+        self.file_tree.heading('Select', text='☐')
+        self.file_tree.heading('Size', text='Size')
+        self.file_tree.heading('Type', text='Type') 
+        self.file_tree.heading('Safety', text='Safety')
+        self.file_tree.heading('Name', text='Filename')
+        self.file_tree.heading('Location', text='Location')
+        
+        self.file_tree.column('Select', width=50, anchor='center')
+        self.file_tree.column('Size', width=80, anchor='e')
+        self.file_tree.column('Type', width=80)
+        self.file_tree.column('Safety', width=80)
+        self.file_tree.column('Name', width=200)
+        self.file_tree.column('Location', width=300)
+        
+        # Scrollbars for treeview
+        v_scrollbar = ttk.Scrollbar(list_container, orient="vertical", command=self.file_tree.yview)
+        h_scrollbar = ttk.Scrollbar(list_container, orient="horizontal", command=self.file_tree.xview)
+        self.file_tree.configure(yscrollcommand=v_scrollbar.set, xscrollcommand=h_scrollbar.set)
+        
+        self.file_tree.grid(row=0, column=0, sticky='nsew')
+        v_scrollbar.grid(row=0, column=1, sticky='ns')
+        h_scrollbar.grid(row=1, column=0, sticky='ew')
+        
+        list_container.grid_rowconfigure(0, weight=1)
+        list_container.grid_columnconfigure(0, weight=1)
+        
+        # Bind events for file selection and details
+        self.file_tree.bind('<ButtonRelease-1>', self.on_file_click)
+        self.file_tree.bind('<Double-1>', self.show_file_details)
+        
+        # Right panel - File details and actions
+        right_panel = ttk.Frame(paned)
+        paned.add(right_panel, weight=1)
+        
+        # File details section
+        details_frame = ttk.LabelFrame(right_panel, text="📄 File Details", padding=10)
+        details_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
+        
+        self.details_text = tk.Text(details_frame, height=15, width=40, 
+                                   bg=self.colors['surface'], font=('Segoe UI', 9),
+                                   wrap=tk.WORD, relief='flat')
+        self.details_text.pack(fill=tk.BOTH, expand=True)
+        
+        # Selection summary
+        summary_frame = ttk.LabelFrame(right_panel, text="📊 Selection Summary", padding=10)
+        summary_frame.pack(fill=tk.X, pady=(0, 10))
+        
+        self.summary_text = tk.Text(summary_frame, height=4, bg=self.colors['surface'], 
+                                   font=('Segoe UI', 9), wrap=tk.WORD, relief='flat')
+        self.summary_text.pack(fill=tk.X)
+        
+        # Populate the file tree
+        self.populate_file_tree()
+        
+        # Action buttons at bottom
+        action_frame = ttk.LabelFrame(main_container, text="🎯 Actions", padding=10)
+        action_frame.pack(fill=tk.X)
+        
+        # Selection controls row
+        selection_row = ttk.Frame(action_frame)
+        selection_row.pack(fill=tk.X, pady=(0, 10))
+        
+        ttk.Button(selection_row, text="☑️ Select All Safe", 
+                  command=self.select_safe_files, style='Modern.TButton').pack(side=tk.LEFT, padx=(0, 10))
+        ttk.Button(selection_row, text="☐ Clear All", 
+                  command=self.clear_all_selections, style='Modern.TButton').pack(side=tk.LEFT, padx=(0, 10))
+        ttk.Button(selection_row, text="🔍 Select by Type", 
+                  command=self.show_type_selector, style='Modern.TButton').pack(side=tk.LEFT, padx=(0, 10))
+        
+        # Main action row
+        main_action_row = ttk.Frame(action_frame)
+        main_action_row.pack(fill=tk.X)
+        
+        ttk.Button(main_action_row, text="♻️ Move to Recycle Bin", 
+                  command=lambda: self.handle_file_deletion(selection_window, 'recycle'),
+                  style='Primary.TButton').pack(side=tk.LEFT, padx=(0, 15))
+        
+        ttk.Button(main_action_row, text="💾 Backup & Delete", 
+                  command=lambda: self.handle_file_deletion(selection_window, 'backup'),
+                  style='Modern.TButton').pack(side=tk.LEFT, padx=(0, 10))
+        
+        ttk.Button(main_action_row, text="📂 Open Location", 
+                  command=self.open_file_location, style='Modern.TButton').pack(side=tk.LEFT, padx=(0, 10))
+        
+        ttk.Button(main_action_row, text="❌ Cancel", 
+                  command=selection_window.destroy, style='Modern.TButton').pack(side=tk.RIGHT)
+        
+        # Update summary initially
+        self.update_selection_summary()
+    
+    def populate_file_tree(self):
+        """Populate the file tree with enhanced file information"""
+        # Clear existing items
+        for item in self.file_tree.get_children():
+            self.file_tree.delete(item)
+        
+        # Initialize file data with safety analysis
+        self.file_data = []
+        from cScan import FileAnalyzer
+        analyzer = FileAnalyzer()
+        
+        for filepath, size in self.large_files:
+            file_info = analyzer.get_file_info(filepath)
+            if file_info:
+                # Add to our data structure
+                file_entry = {
+                    'path': filepath,
+                    'size': size,
+                    'name': os.path.basename(filepath),
+                    'location': os.path.dirname(filepath),
+                    'category': file_info['category'],
+                    'safety': file_info['safety'],
+                    'modified': file_info['modified'],
+                    'selected': False,
+                    'safety_icon': {'safe': '✅', 'user': '⚠️', 'unknown': '❓', 'critical': '❌'}.get(file_info['safety'], '❓')
+                }
+                self.file_data.append(file_entry)
+        
+        # Sort by size (largest first)
+        self.file_data.sort(key=lambda x: -x['size'])
+        
+        # Populate tree
+        self.refresh_file_tree()
+    
+    def refresh_file_tree(self):
+        """Refresh the file tree display based on current filter"""
+        # Clear tree
+        for item in self.file_tree.get_children():
+            self.file_tree.delete(item)
+        
+        # Apply current filter
+        filtered_files = self.apply_filter(self.file_data)
+        
+        # Add filtered files to tree
+        for i, file_entry in enumerate(filtered_files):
+            select_icon = "☑️" if file_entry['selected'] else "☐"
+            
+            values = (
+                select_icon,
+                get_size_readable(file_entry['size']),
+                file_entry['category'].title(),
+                f"{file_entry['safety_icon']} {file_entry['safety'].title()}",
+                file_entry['name'],
+                file_entry['location']
+            )
+            
+            # Insert with tags for styling
+            item = self.file_tree.insert('', tk.END, values=values, tags=(file_entry['safety'],))
+            
+        # Configure tags for safety coloring
+        self.file_tree.tag_configure('safe', foreground=self.colors['success'])
+        self.file_tree.tag_configure('user', foreground=self.colors['warning'])
+        self.file_tree.tag_configure('unknown', foreground=self.colors['text'])
+        self.file_tree.tag_configure('critical', foreground=self.colors['danger'])
+    
+    def apply_filter(self, files):
+        """Apply the current filter to file list"""
+        filter_value = self.filter_var.get()
+        
+        if filter_value == "All":
+            return files
+        elif filter_value == "Safe to Delete":
+            return [f for f in files if f['safety'] in ['safe', 'cache', 'temp']]
+        elif filter_value == "User Files":
+            return [f for f in files if f['safety'] == 'user']
+        elif filter_value == "Large (>1GB)":
+            return [f for f in files if f['size'] > 1024*1024*1024]
+        elif filter_value == "Recent (<7 days)":
+            from datetime import datetime, timedelta
+            week_ago = datetime.now() - timedelta(days=7)
+            return [f for f in files if f['modified'] > week_ago]
+        
+        return files
+    
+    def apply_file_filter(self, event=None):
+        """Apply filter when selection changes"""
+        self.refresh_file_tree()
+        self.update_selection_summary()
+    
+    def on_file_click(self, event):
+        """Handle file click for selection toggle and details display"""
+        item = self.file_tree.selection()[0] if self.file_tree.selection() else None
+        if not item:
+            return
+        
+        # Get the row index
+        row_index = self.file_tree.index(item)
+        filtered_files = self.apply_filter(self.file_data)
+        
+        if row_index < len(filtered_files):
+            file_entry = filtered_files[row_index]
+            
+            # Check if click was on the select column
+            region = self.file_tree.identify_region(event.x, event.y)
+            if region == "cell":
+                column = self.file_tree.identify_column(event.x, event.y)
+                if column == '#1':  # Select column
+                    # Toggle selection
+                    original_file = next(f for f in self.file_data if f['path'] == file_entry['path'])
+                    original_file['selected'] = not original_file['selected']
+                    self.refresh_file_tree()
+                    self.update_selection_summary()
+                    return
+            
+            # Show file details
+            self.show_file_info(file_entry)
+    
+    def show_file_info(self, file_entry):
+        """Display detailed file information"""
+        self.details_text.configure(state='normal')
+        self.details_text.delete(1.0, tk.END)
+        
+        # Format file details
+        details = f"""📄 {file_entry['name']}
+
+📁 Location:
+{file_entry['location']}
+
+📏 Size: {get_size_readable(file_entry['size'])}
+
+🏷️ Category: {file_entry['category'].title()}
+
+🛡️ Safety Level: {file_entry['safety_icon']} {file_entry['safety'].title()}
+
+📅 Last Modified: {file_entry['modified'].strftime('%Y-%m-%d %H:%M:%S')}
+
+💡 Safety Notes:"""
+        
+        if file_entry['safety'] == 'safe':
+            details += "\n✅ This file is safe to delete. It's likely cache or temporary data that can be regenerated."
+        elif file_entry['safety'] == 'user':
+            details += "\n⚠️ This is a user file. Review carefully before deletion."
+        elif file_entry['safety'] == 'unknown':
+            details += "\n❓ Safety level unknown. Proceed with caution."
+        elif file_entry['safety'] == 'critical':
+            details += "\n❌ This file may be critical to system operation. Deletion not recommended."
+        
+        self.details_text.insert(tk.END, details)
+        self.details_text.configure(state='disabled')
+    
+    def update_selection_summary(self):
+        """Update the selection summary display"""
+        selected_files = [f for f in self.file_data if f['selected']]
+        total_size = sum(f['size'] for f in selected_files)
+        
+        # Count by safety level
+        safety_counts = {}
+        for f in selected_files:
+            safety_counts[f['safety']] = safety_counts.get(f['safety'], 0) + 1
+        
+        self.summary_text.configure(state='normal')
+        self.summary_text.delete(1.0, tk.END)
+        
+        summary = f"""📊 Selection Summary
+
+📋 Files Selected: {len(selected_files)}
+💾 Total Size: {get_size_readable(total_size)}
+
+🛡️ Safety Breakdown:"""
+        
+        for safety, count in safety_counts.items():
+            icon = {'safe': '✅', 'user': '⚠️', 'unknown': '❓', 'critical': '❌'}.get(safety, '❓')
+            summary += f"\n{icon} {safety.title()}: {count} files"
+        
+        self.summary_text.insert(tk.END, summary)
+        self.summary_text.configure(state='disabled')
+    
+    def select_safe_files(self):
+        """Select all files that are safe to delete"""
+        for file_entry in self.file_data:
+            if file_entry['safety'] in ['safe', 'cache', 'temp']:
+                file_entry['selected'] = True
+        self.refresh_file_tree()
+        self.update_selection_summary()
+    
+    def clear_all_selections(self):
+        """Clear all file selections"""
+        for file_entry in self.file_data:
+            file_entry['selected'] = False
+        self.refresh_file_tree()
+        self.update_selection_summary()
+    
+    def show_type_selector(self):
+        """Show dialog to select files by type/category"""
+        type_window = tk.Toplevel(self.root)
+        type_window.title("🔍 Select by Type")
+        type_window.geometry("400x300")
+        type_window.configure(bg=self.colors['background'])
+        
+        frame = ttk.Frame(type_window, padding=20)
         frame.pack(fill=tk.BOTH, expand=True)
         
-        # Instructions
-        ttk.Label(frame, text="Select files to delete:", font=('Arial', 12, 'bold')).pack(pady=(0, 10))
+        ttk.Label(frame, text="Select file categories to include:", style='Subtitle.TLabel').pack(pady=(0, 15))
         
-        # Scrollable frame for file list
-        canvas = tk.Canvas(frame)
-        scrollbar = ttk.Scrollbar(frame, orient="vertical", command=canvas.yview)
-        scrollable_frame = ttk.Frame(canvas)
+        # Get unique categories
+        categories = set(f['category'] for f in self.file_data)
+        self.category_vars = {}
         
-        scrollable_frame.bind(
-            "<Configure>",
-            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        for category in sorted(categories):
+            var = tk.BooleanVar()
+            self.category_vars[category] = var
+            ttk.Checkbutton(frame, text=f"{category.title()} ({len([f for f in self.file_data if f['category'] == category])} files)", 
+                           variable=var).pack(anchor='w', pady=2)
+        
+        button_frame = ttk.Frame(frame)
+        button_frame.pack(pady=(20, 0))
+        
+        ttk.Button(button_frame, text="✅ Apply Selection", 
+                  command=lambda: self.apply_type_selection(type_window)).pack(side=tk.LEFT, padx=(0, 10))
+        ttk.Button(button_frame, text="❌ Cancel", 
+                  command=type_window.destroy).pack(side=tk.LEFT)
+    
+    def apply_type_selection(self, type_window):
+        """Apply the type-based selection"""
+        selected_categories = [cat for cat, var in self.category_vars.items() if var.get()]
+        
+        for file_entry in self.file_data:
+            if file_entry['category'] in selected_categories:
+                file_entry['selected'] = True
+        
+        type_window.destroy()
+        self.refresh_file_tree()
+        self.update_selection_summary()
+    
+    def show_file_details(self, event):
+        """Show detailed file information in a popup"""
+        item = self.file_tree.selection()[0] if self.file_tree.selection() else None
+        if not item:
+            return
+        
+        row_index = self.file_tree.index(item)
+        filtered_files = self.apply_filter(self.file_data)
+        
+        if row_index < len(filtered_files):
+            file_entry = filtered_files[row_index]
+            
+            # Create detailed info window
+            detail_window = tk.Toplevel(self.root)
+            detail_window.title(f"📄 {file_entry['name']}")
+            detail_window.geometry("600x400")
+            
+            text_widget = scrolledtext.ScrolledText(detail_window, wrap=tk.WORD, 
+                                                   font=('Segoe UI', 10), padding=20)
+            text_widget.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+            
+            # Extended file information
+            try:
+                file_stats = os.stat(file_entry['path'])
+                
+                extended_info = f"""📄 DETAILED FILE INFORMATION
+
+🏷️ Filename: {file_entry['name']}
+
+📁 Full Path: 
+{file_entry['path']}
+
+📏 Size: {get_size_readable(file_entry['size'])} ({file_entry['size']:,} bytes)
+
+🏷️ Category: {file_entry['category'].title()}
+🛡️ Safety Level: {file_entry['safety_icon']} {file_entry['safety'].title()}
+
+📅 Created: {datetime.fromtimestamp(file_stats.st_ctime).strftime('%Y-%m-%d %H:%M:%S')}
+📅 Modified: {file_entry['modified'].strftime('%Y-%m-%d %H:%M:%S')}
+📅 Accessed: {datetime.fromtimestamp(file_stats.st_atime).strftime('%Y-%m-%d %H:%M:%S')}
+
+💡 SAFETY ASSESSMENT:
+"""
+                
+                if file_entry['safety'] == 'safe':
+                    extended_info += "✅ SAFE TO DELETE\nThis file appears to be cache, temporary data, or other regenerable content."
+                elif file_entry['safety'] == 'user':
+                    extended_info += "⚠️ USER FILE\nThis file contains user data. Review carefully before deletion."
+                elif file_entry['safety'] == 'unknown':
+                    extended_info += "❓ UNKNOWN SAFETY LEVEL\nCannot determine if this file is safe to delete. Proceed with caution."
+                elif file_entry['safety'] == 'critical':
+                    extended_info += "❌ CRITICAL FILE\nThis file may be essential for system operation. Deletion not recommended."
+                
+                text_widget.insert(tk.END, extended_info)
+                text_widget.configure(state='disabled')
+                
+            except Exception as e:
+                text_widget.insert(tk.END, f"Error getting file details: {e}")
+    
+    def open_file_location(self):
+        """Open the location of selected file in file explorer"""
+        selected_files = [f for f in self.file_data if f['selected']]
+        if not selected_files:
+            messagebox.showwarning("No Selection", "Please select a file first.")
+            return
+        
+        file_path = selected_files[0]['path']
+        directory = os.path.dirname(file_path)
+        
+        try:
+            if IS_WINDOWS:
+                subprocess.run(['explorer', '/select,', file_path])
+            elif IS_MAC:
+                subprocess.run(['open', '-R', file_path])
+            else:  # Linux
+                subprocess.run(['xdg-open', directory])
+        except Exception as e:
+            messagebox.showerror("Error", f"Could not open file location: {e}")
+    
+    def handle_file_deletion(self, selection_window, deletion_mode):
+        """Handle file deletion with different safety modes"""
+        selected_files = [f for f in self.file_data if f['selected']]
+        
+        if not selected_files:
+            messagebox.showwarning("No Selection", "Please select files to delete first.")
+            return
+        
+        # Safety confirmation based on selection
+        critical_files = [f for f in selected_files if f['safety'] == 'critical']
+        if critical_files:
+            result = messagebox.askyesno(
+                "⚠️ Critical Files Selected", 
+                f"You have selected {len(critical_files)} critical files that may be essential for system operation.\n\n"
+                "Are you absolutely sure you want to proceed?"
+            )
+            if not result:
+                return
+        
+        # Show confirmation dialog
+        total_size = sum(f['size'] for f in selected_files)
+        safety_summary = {}
+        for f in selected_files:
+            safety_summary[f['safety']] = safety_summary.get(f['safety'], 0) + 1
+        
+        safety_text = "\n".join([f"• {safety.title()}: {count} files" for safety, count in safety_summary.items()])
+        
+        if deletion_mode == 'recycle':
+            action_text = "move to Recycle Bin/Trash"
+            icon = "♻️"
+        else:  # backup mode
+            action_text = "backup and delete"
+            icon = "💾"
+        
+        confirmation = messagebox.askyesno(
+            f"{icon} Confirm Deletion",
+            f"Ready to {action_text}:\n\n"
+            f"📋 Files: {len(selected_files)}\n"
+            f"💾 Total Size: {get_size_readable(total_size)}\n\n"
+            f"Safety Breakdown:\n{safety_text}\n\n"
+            f"This action can be undone from the Recycle Bin/Trash."
         )
         
-        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
+        if confirmation:
+            selection_window.destroy()
+            self.perform_safe_deletion(selected_files, deletion_mode)
+    
+    def perform_safe_deletion(self, selected_files, deletion_mode):
+        """Perform the actual file deletion with safety measures"""
+        self.log_output(f"\n🎯 Starting {deletion_mode} deletion for {len(selected_files)} files:", "header")
         
-        # File checkboxes
-        self.file_vars = []
-        for i, (filepath, size) in enumerate(sorted(self.large_files, key=lambda x: -x[1])):
-            var = tk.BooleanVar()
-            self.file_vars.append((var, filepath, size))
-            
-            file_frame = ttk.Frame(scrollable_frame)
-            file_frame.pack(fill=tk.X, pady=2)
-            
-            cb = ttk.Checkbutton(file_frame, variable=var)
-            cb.pack(side=tk.LEFT)
-            
-            size_label = ttk.Label(file_frame, text=f"{get_size_readable(size):>10}", font=('Courier', 9))
-            size_label.pack(side=tk.LEFT, padx=(5, 10))
-            
-            path_label = ttk.Label(file_frame, text=filepath, font=('Arial', 9))
-            path_label.pack(side=tk.LEFT)
+        # Initialize the safe delete manager
+        from cScan import SafeDeleteManager, ConfigManager
+        config = ConfigManager()
         
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
+        # Configure deletion mode
+        if deletion_mode == 'recycle':
+            config.set('Settings', 'use_recycle_bin', 'true')
+            config.set('Settings', 'backup_before_delete', 'false')
+        else:  # backup mode
+            config.set('Settings', 'use_recycle_bin', 'false')
+            config.set('Settings', 'backup_before_delete', 'true')
+        
+        safe_delete = SafeDeleteManager(config)
+        
+        # Progress tracking
+        self.progress.config(maximum=len(selected_files), value=0)
+        self.update_status(f"Safely deleting files...")
+        
+        success_count = 0
+        total_freed = 0
+        failed_files = []
+        
+        # Create deletion log for this session
+        session_log = {
+            'timestamp': datetime.now().isoformat(),
+            'mode': deletion_mode,
+            'files': [],
+            'success_count': 0,
+            'total_size': 0
+        }
+        
+        for i, file_entry in enumerate(selected_files):
+            filepath = file_entry['path']
+            size = file_entry['size']
+            
+            # Convert to format expected by safe_delete
+            file_info = {
+                'size': size,
+                'category': file_entry['category'],
+                'safety': file_entry['safety'],
+                'modified': file_entry['modified']
+            }
+            
+            try:
+                success, message = safe_delete.safe_delete(filepath, file_info)
+                
+                if success:
+                    success_count += 1
+                    total_freed += size
+                    filename = os.path.basename(filepath)
+                    self.log_output(f"✅ {deletion_mode.title()}: {get_size_readable(size)} - {filename}", "success")
+                    
+                    # Add to session log
+                    session_log['files'].append({
+                        'path': filepath,
+                        'size': size,
+                        'category': file_entry['category'],
+                        'safety': file_entry['safety'],
+                        'status': 'success'
+                    })
+                else:
+                    failed_files.append((filepath, message))
+                    filename = os.path.basename(filepath)
+                    self.log_output(f"❌ Failed: {filename} - {message}", "error")
+                    
+                    session_log['files'].append({
+                        'path': filepath,
+                        'size': size,
+                        'category': file_entry['category'],
+                        'safety': file_entry['safety'],
+                        'status': f'failed: {message}'
+                    })
+                    
+            except Exception as e:
+                failed_files.append((filepath, str(e)))
+                filename = os.path.basename(filepath)
+                self.log_output(f"❌ Error: {filename} - {e}", "error")
+            
+            # Update progress
+            self.progress.config(value=i + 1)
+            self.root.update_idletasks()
+        
+        # Update session log totals
+        session_log['success_count'] = success_count
+        session_log['total_size'] = total_freed
+        
+        # Save session log
+        self.save_deletion_session(session_log)
+        
+        # Final summary
+        if success_count > 0:
+            self.log_output(f"\n🎉 Successfully processed {success_count} files, freed {get_size_readable(total_freed)}", "success")
+            
+            if deletion_mode == 'recycle':
+                self.log_output("💡 Files moved to Recycle Bin/Trash - can be restored if needed", "info")
+            else:
+                self.log_output("💡 Files backed up before deletion - check backup directory", "info")
+        
+        if failed_files:
+            self.log_output(f"\n⚠️ Failed to delete {len(failed_files)} files:", "warning")
+            for filepath, error_msg in failed_files[:5]:  # Show first 5 failures
+                filename = os.path.basename(filepath)
+                self.log_output(f"  • {filename}: {error_msg}", "warning")
+            
+            if len(failed_files) > 5:
+                self.log_output(f"  ... and {len(failed_files) - 5} more failures", "warning")
+        
+        # Update total freed counter
+        self.total_freed += total_freed
+        
+        # Show undo information
+        if success_count > 0:
+            self.show_undo_info(deletion_mode, success_count, total_freed)
+        
+        # Re-enable buttons
+        self.enable_cleanup_buttons()
+    
+    def save_deletion_session(self, session_log):
+        """Save deletion session for potential undo operations"""
+        try:
+            # Create sessions directory if it doesn't exist
+            sessions_dir = os.path.join(tempfile.gettempdir(), 'cScan_sessions')
+            if not os.path.exists(sessions_dir):
+                os.makedirs(sessions_dir)
+            
+            # Save session file
+            session_filename = f"deletion_session_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            session_path = os.path.join(sessions_dir, session_filename)
+            
+            with open(session_path, 'w') as f:
+                json.dump(session_log, f, indent=2)
+                
+            self.log_output(f"💾 Session saved: {session_filename}", "info")
+            
+        except Exception as e:
+            self.log_output(f"⚠️ Could not save session log: {e}", "warning")
+    
+    def show_undo_info(self, deletion_mode, file_count, total_size):
+        """Show information about undo options"""
+        undo_window = tk.Toplevel(self.root)
+        undo_window.title("✅ Deletion Complete")
+        undo_window.geometry("500x350")
+        undo_window.configure(bg=self.colors['background'])
+        
+        frame = ttk.Frame(undo_window, padding=20)
+        frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Success message
+        success_label = ttk.Label(frame, text="✅ Files Successfully Processed!", style='Title.TLabel')
+        success_label.pack(pady=(0, 20))
+        
+        # Stats
+        stats_text = f"""📊 Summary:
+• Files processed: {file_count}
+• Space freed: {get_size_readable(total_size)}
+• Method: {deletion_mode.title()}"""
+        
+        stats_label = ttk.Label(frame, text=stats_text, font=('Segoe UI', 10))
+        stats_label.pack(pady=(0, 20))
+        
+        # Undo information
+        if deletion_mode == 'recycle':
+            undo_text = """♻️ Recovery Options:
+
+Files have been moved to your Recycle Bin/Trash.
+
+To restore files:
+• Windows: Open Recycle Bin, select files, click 'Restore'
+• macOS: Open Trash, drag files back to original location
+• Linux: Use 'gio trash --restore' command
+
+Files will remain in trash until manually emptied."""
+        else:
+            backup_dir = os.path.join(tempfile.gettempdir(), 'cScan_backups')
+            undo_text = f"""💾 Recovery Options:
+
+Files have been backed up before deletion.
+
+Backup location:
+{backup_dir}
+
+To restore files:
+• Browse to backup directory
+• Copy desired files back to original locations
+• Files are timestamped for easy identification"""
+        
+        undo_info = tk.Text(frame, height=10, wrap=tk.WORD, font=('Segoe UI', 9),
+                           bg=self.colors['surface'], relief='flat')
+        undo_info.pack(fill=tk.BOTH, expand=True, pady=(0, 20))
+        undo_info.insert(tk.END, undo_text)
+        undo_info.configure(state='disabled')
         
         # Buttons
         button_frame = ttk.Frame(frame)
-        button_frame.pack(pady=(10, 0))
+        button_frame.pack()
         
-        ttk.Button(button_frame, text="Select All", 
-                  command=lambda: [var.set(True) for var, _, _ in self.file_vars]).pack(side=tk.LEFT, padx=(0, 10))
-        ttk.Button(button_frame, text="Select None", 
-                  command=lambda: [var.set(False) for var, _, _ in self.file_vars]).pack(side=tk.LEFT, padx=(0, 10))
-        ttk.Button(button_frame, text="Delete Selected", 
-                  command=lambda: self.delete_selected_files(selection_window)).pack(side=tk.LEFT, padx=(0, 10))
-        ttk.Button(button_frame, text="Cancel", 
-                  command=selection_window.destroy).pack(side=tk.RIGHT)
+        if deletion_mode == 'recycle':
+            ttk.Button(button_frame, text="🗑️ Open Recycle Bin", 
+                      command=self.open_recycle_bin, style='Modern.TButton').pack(side=tk.LEFT, padx=(0, 10))
+        else:
+            ttk.Button(button_frame, text="📂 Open Backup Folder", 
+                      command=lambda: self.open_backup_folder(), style='Modern.TButton').pack(side=tk.LEFT, padx=(0, 10))
+        
+        ttk.Button(button_frame, text="✅ OK", 
+                  command=undo_window.destroy, style='Primary.TButton').pack(side=tk.LEFT)
     
+    def open_recycle_bin(self):
+        """Open the recycle bin/trash"""
+        try:
+            if IS_WINDOWS:
+                subprocess.run(['explorer', 'shell:RecycleBinFolder'])
+            elif IS_MAC:
+                subprocess.run(['open', os.path.expanduser('~/.Trash')])
+            else:  # Linux
+                trash_dir = os.path.expanduser('~/.local/share/Trash/files')
+                if os.path.exists(trash_dir):
+                    subprocess.run(['xdg-open', trash_dir])
+        except Exception as e:
+            messagebox.showerror("Error", f"Could not open recycle bin: {e}")
+    
+    def open_backup_folder(self):
+        """Open the backup folder"""
+        backup_dir = os.path.join(tempfile.gettempdir(), 'cScan_backups')
+        try:
+            if IS_WINDOWS:
+                subprocess.run(['explorer', backup_dir])
+            elif IS_MAC:
+                subprocess.run(['open', backup_dir])
+            else:  # Linux
+                subprocess.run(['xdg-open', backup_dir])
+        except Exception as e:
+            messagebox.showerror("Error", f"Could not open backup folder: {e}")
+
     def delete_selected_files(self, selection_window):
         """Delete the selected files"""
         selected_files = [(filepath, size) for var, filepath, size in self.file_vars if var.get()]
@@ -1834,15 +2791,17 @@ class CleanupGUI:
                 os.remove(filepath)
                 deleted_count += 1
                 deleted_size += size
-                self.log_output(f"Deleted: {get_size_readable(size)} - {filepath}")
+                filename = filepath.split('/')[-1].split('\\')[-1]
+                self.log_output(f"✅ Deleted: {get_size_readable(size)} - {filename}", "success")
             except Exception as e:
-                self.log_output(f"Failed to delete: {filepath} - {e}")
+                filename = filepath.split('/')[-1].split('\\')[-1]
+                self.log_output(f"❌ Failed to delete: {filename} - {e}", "error")
             
             self.progress.config(value=i + 1)
             self.root.update_idletasks()
         
         self.total_freed += deleted_size
-        self.log_output(f"\nSuccessfully deleted {deleted_count} files, freed {get_size_readable(deleted_size)}")
+        self.log_output(f"\n🎉 Successfully deleted {deleted_count} files, freed {get_size_readable(deleted_size)}", "success")
         
         self.enable_cleanup_buttons()
     
@@ -1899,6 +2858,7 @@ class CleanupGUI:
         self.empty_recycle_btn.config(state='normal')
         self.enable_scan_button()
         self.update_status(f"Scan complete. Total freed: {get_size_readable(self.total_freed)}")
+        self.log_output(f"\n💾 Total space freed this session: {get_size_readable(self.total_freed)}", "success")
     
     def enable_scan_button(self):
         """Re-enable scan button"""
